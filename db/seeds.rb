@@ -21,4 +21,3 @@ movies.each do |movie|
     rating: movie["vote_average"]
   )
 end
-
