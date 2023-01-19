@@ -7,5 +7,12 @@
 
 
 <% @lists.each do |list| %>
-  <%= link_to "#{list.name}", list_path(list), class: "text-decoration-none" %>
+  <%= link_to list_path(list), class: "text-decoration-none" do %>
+    <div class="card-list"
+        style="background-image:
+          linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+          url(<% list.image_url %>)">
+      <%= list.name %>
+    </div>
+  <% end %>
 <% end %>
