@@ -1,7 +1,9 @@
 .banner {
   background-size: cover;
-  background-position: center;
+  background-position: right 50% bottom 55%;
   padding: 150px 0;
+  background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+                    url("home.jpg");
 }
 
 .banner h1 {
