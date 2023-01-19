@@ -9,8 +9,17 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-
-  <body>
-    <%= yield %>
-  </body>
+  <nav class="navbar navbar-dark bg-dark justify-content-between">
+    <div class="container">
+      <%= link_to root_path, class:"navbar-brand" do %>
+        <%= image_tag "popcorn.png", alt: "Gwen Watch List", width: 30, height: 30 %>
+      <% end %>
+      <%= link_to "New list", new_list_path, class: "btn btn-outline-success my-2 my-sm-0"%>
+    </div>
+  </nav>
+  <div class="container">
+    <body>
+      <%= yield %>
+    </body>
+  </div>
 </html>

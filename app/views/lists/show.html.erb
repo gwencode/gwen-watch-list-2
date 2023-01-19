@@ -1,2 +1,20 @@
-<h1>Lists#show</h1>
-<p>Find me in app/views/lists/show.html.erb</p>
+<h2><%= @list.name %></h2>
+
+<% @list.movies.each do |movie| %>
+  <%= movie.title %>
+  <%= movie.overview %>
+  <%= movie.poster_url %>
+  <%= movie.rating %>
+<% end %>
+
+<div class="col-6 my-3">
+  <div class="d-flex justify-content-center">
+      <h4 id='anchor-form' >Add a movie to my <%= @list.name %>'s list</h4>
+  </div>
+  <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: list_bookmarks_path(@list)) do |f| %>
+    <%= f.label :comment, class: "form-label" %>
+    <%= f.text_field :comment, placeholder: "At least 6 characters", class: "form-control" %>
+    <%= f.association :movie, class: "form-control" %>
+    <div class="text-center"><%= f.submit "Add movie", class: "btn btn-primary" %></div>
+  <% end %>
+</div>

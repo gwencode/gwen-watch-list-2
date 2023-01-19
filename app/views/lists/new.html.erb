@@ -1,8 +1,13 @@
-<h1>Lists#new</h1>
-<p>Find me in app/views/lists/new.html.erb</p>
+<div class="col-6 my-3 mx-auto">
+  <h1 class="text-center">Create a new list</h1>
 
-<%= form_for @list do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.submit %>
-<% end %>
+  <%= simple_form_for @list do |f| %>
+    <div class="form-group">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-control" %>
+    <div class="text-center">
+      <%= f.submit class: "btn btn-primary my-3" %>
+    </div>
+  <% end %>
+
+</div>
