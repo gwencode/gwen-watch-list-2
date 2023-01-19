@@ -9,12 +9,15 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-  <nav class="navbar navbar-dark bg-dark justify-content-between">
+  <nav class="navbar navbar-dark bg-dark justify-content-between sticky-top">
     <div class="container">
       <%= link_to root_path, class:"navbar-brand" do %>
         <%= image_tag "popcorn.png", alt: "Gwen Watch List", width: 30, height: 30 %>
       <% end %>
-      <%= link_to "New list", new_list_path, class: "btn btn-outline-success my-2 my-sm-0"%>
+      <div class="d-flex align-items-center gap-3">
+        <%= link_to "My lists", new_list_path, class: "nav-link text-white"%>
+        <%= link_to "New list", new_list_path, class: "btn btn-outline-success my-2 my-sm-0"%>
+      </div>
     </div>
   </nav>
   <div class="container">
