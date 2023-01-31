@@ -23,3 +23,28 @@ $border-radius-lg: 2px;
 $border-radius-sm: 2px;
 
 // Override other variables below!
+
+h1, h2 {
+  padding: 0 !important;
+  margin: 16px 0 !important;
+}
+
+h1 {
+  font-size: 40px !important;
+}
+
+h2 {
+  font-size: 33px !important;
+}
+
+h3 {
+  font-size: 27px !important;
+}
+
+h4 {
+  font-size: 23px !important;
+}
+
+h5 {
+  font-size: 19px !important;
+}

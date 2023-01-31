@@ -1,2 +1,9 @@
 // Import page-specific CSS files here.
 @import "home";
+
+// General layout
+.small-container {
+  margin: 0 auto;
+  padding: 0 16px;
+  margin-bottom: 32px;
+}
