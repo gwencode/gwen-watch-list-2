@@ -1,0 +1,27 @@
+<div class="banner">
+  <div class="container">
+    <h1 class="text-center">Save any kind of movies</h1>
+    <br>
+  </div>
+</div>
+<div class="small-container">
+  <%= form_with url: root_path, method: :get, class: "d-flex" do %>
+  <%= text_field_tag :query,
+    params[:query],
+    class: "form-control",
+    placeholder: "Find a movie"
+  %>
+  <%= submit_tag "Search", class: "btn btn-primary" %>
+<% end %>
+  <h2>Popular Movies</h2>
+  <div class="cards-movies">
+    <% @movies.each do |movie| %>
+      <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+        <div class="card-movie">
+          <%= image_tag movie.poster_url, alt: "" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
