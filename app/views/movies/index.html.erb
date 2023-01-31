@@ -4,15 +4,20 @@
     <br>
   </div>
 </div>
+<div class="search-container">
+    <%= form_with url: root_path, method: :get, class: "search-form" do %>
+    <div class="d-flex align-items-center">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <%= text_field_tag :query,
+        params[:query],
+        class: "search-field",
+        placeholder: "Search..."
+      %>
+    </div>
+    <%= submit_tag "Search", class: "btn-ghost" %>
+    <% end %>
+</div>
 <div class="small-container">
-  <%= form_with url: root_path, method: :get, class: "d-flex" do %>
-  <%= text_field_tag :query,
-    params[:query],
-    class: "form-control",
-    placeholder: "Find a movie"
-  %>
-  <%= submit_tag "Search", class: "btn btn-primary" %>
-<% end %>
   <h2>Popular Movies</h2>
   <div class="cards-movies">
     <% @movies.each do |movie| %>
