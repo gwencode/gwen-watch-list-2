@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_01_123305) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_01_131545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,9 +18,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_123305) do
     t.string "name"
     t.text "biography"
     t.string "picture_url"
-    t.integer "api_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "actor_api_id"
+    t.integer "order"
   end
 
   create_table "bookmarks", force: :cascade do |t|
@@ -59,10 +60,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_123305) do
     t.string "backdrop_url"
     t.string "release_date"
     t.integer "api_id"
-    t.integer "budget"
+    t.bigint "budget"
     t.string "director"
     t.integer "run_time"
-    t.integer "revenue"
+    t.bigint "revenue"
   end
 
   add_foreign_key "bookmarks", "lists"

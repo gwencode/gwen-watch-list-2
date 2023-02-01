@@ -10,23 +10,66 @@ require 'json'
 require 'open-uri'
 
 puts 'Cleaning database...'
+Cast.destroy_all
+Actor.destroy_all
 Movie.destroy_all
 
 url = ENV['API_URL']
+api_key = ENV['API_KEY']
 
-(1..5).to_a.each do |page_index|
-  # change 5 in 36885 to have all pages
+puts 'Creating movies...'
+
+(1..1).to_a.each do |page_index|
+  # change 1 in 36885 to have all pages
   url_page = "#{url}&page=#{page_index}"
   movies_serialized = URI.open(url_page).read
   movies = JSON.parse(movies_serialized)['results']
   movies.each do |movie|
-    Movie.create(
+    new_movie = Movie.create(
       title: movie['title'],
       overview: movie['overview'],
       poster_url: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
       backdrop_url: "https://image.tmdb.org/t/p/w500#{movie['backdrop_path']}",
-      rating: movie['vote_average']
+      rating: movie['vote_average'],
+      release_date: movie['release_date'],
+      api_id: movie['id']
     )
+    url_movie = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}?api_key=#{api_key}&language=en-US"
+    movie_details_serialized = URI.open(url_movie).read
+    movie_details = JSON.parse(movie_details_serialized)
+    new_movie.update(run_time: movie_details['runtime'], budget: movie_details['budget'], revenue: movie_details['revenue'])
+
+    url_credits = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}/credits?api_key=#{api_key}&language=en-US"
+    credits_serialized = URI.open(url_credits).read
+    crew = JSON.parse(credits_serialized)['crew']
+    director = crew.find { |member| member['job'] == 'Director' }['name']
+    new_movie.update(director: director)
   end
   puts "#{Movie.all.count} movies created!"
 end
+
+puts 'Creating actors and casts...'
+
+Movie.all.each do |movie|
+  url_credits = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/credits?api_key=#{api_key}&language=en-US"
+  credits_serialized = URI.open(url_credits).read
+  credits = JSON.parse(credits_serialized)
+  credits['cast'].each do |cast|
+    actor = Actor.find_or_create_by(name: cast['name'], actor_api_id: cast['id'], order: cast['order'])
+    Cast.create(actor: actor, movie: movie) unless actor.id.nil?
+  end
+end
+
+puts 'Actors and casts created!'
+
+puts 'Adding details to actors...'
+Actor.all.each do |actor|
+  url_actor = "https://api.themoviedb.org/3/person/#{actor[:actor_api_id]}?api_key=#{api_key}&language=en-US"
+  actor_details_serialized = URI.open(url_actor).read
+  actor_details = JSON.parse(actor_details_serialized)
+  actor.update(biography: actor_details['biography'],
+               picture_url: "https://image.tmdb.org/t/p/w780#{actor_details['profile_path']}")
+end
+
+puts 'Details added to actors!'
+puts "#{Actor.all.count} actors & #{Cast.all.count} casts created!"
