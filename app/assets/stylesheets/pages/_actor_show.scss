@@ -1,0 +1,24 @@
+.actor-background {
+  background-color: $black;
+  height: 80vh;
+  width: 100vw;
+  padding: 32px;
+}
+
+.actor-details {
+  display: flex;
+  color: $white;
+  gap: 16px;
+  height: 100%;
+}
+
+.actor-infos {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  h2 {
+    margin-bottom: 0 !important;
+  }
+}

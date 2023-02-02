@@ -18,10 +18,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_131545) do
     t.string "name"
     t.text "biography"
     t.string "picture_url"
+    t.integer "api_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "actor_api_id"
-    t.integer "order"
   end
 
   create_table "bookmarks", force: :cascade do |t|
@@ -39,6 +38,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_131545) do
     t.bigint "actor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "actor_api_id"
+    t.integer "order"
+    t.string "character"
     t.index ["actor_id"], name: "index_casts_on_actor_id"
     t.index ["movie_id"], name: "index_casts_on_movie_id"
   end
@@ -54,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_131545) do
     t.string "title"
     t.text "overview"
     t.string "poster_url"
-    t.integer "rating"
+    t.float "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "backdrop_url"

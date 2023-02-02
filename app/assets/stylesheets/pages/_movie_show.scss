@@ -1,0 +1,53 @@
+.movie-background {
+  background-size: cover;
+  height: 80vh;
+  width: 100vw;
+  padding: 32px;
+}
+
+.movie-details {
+  display: flex;
+  color: $white;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 20px;
+  gap: 16px;
+  height: 100%;
+}
+
+.poster {
+  border-radius: 20px;
+}
+
+.movie-infos {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  h2 {
+    margin-bottom: 0 !important;
+  }
+}
+
+.movie-sub-infos {
+  display: flex;
+  gap: 32px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.business {
+  display: flex;
+  gap: 32px;
+  justify-content: space-around;
+
+  p {
+    padding: 8px 32px;
+    background-color: $dark-gray;
+    border-radius: 20px;
+  }
+}
