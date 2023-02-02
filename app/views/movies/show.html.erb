@@ -40,7 +40,7 @@
       </div>
      </div>
 </div>
-<div class="small-container">
+<div class="small-container-white">
   <h2>Actors</h2>
   <div class="cards-movies">
     <% @movie.actors.sort_by { |actor| actor.casts.where(movie: @movie).first.order }.each do |actor| %>

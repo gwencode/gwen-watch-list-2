@@ -4,8 +4,13 @@
 @import "actor_show";
 
 // General layout
-.small-container {
-  margin: 0 auto;
-  padding: 0 16px;
-  margin-bottom: 32px;
+body {
+ background-color: $black;
 }
+
+.small-container-white {
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+  background-color: $white;
+}
+

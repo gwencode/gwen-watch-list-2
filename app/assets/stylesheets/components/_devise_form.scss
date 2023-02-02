@@ -1,0 +1,21 @@
+.devise-background {
+  padding: 16px;
+}
+
+.devise-form {
+  color: $white;
+  background-color: $dark-gray;
+  padding: 1rem;
+  border-radius: 20px;
+  text-align: center;
+  opacity: 0.9;
+  margin-top: 32px;
+}
+
+.sub-links {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
