@@ -2,6 +2,7 @@
 
 # Controller for the Movie model
 class MoviesController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_movie, only: %i[show]
 
   def index
@@ -10,6 +11,9 @@ class MoviesController < ApplicationController
     else
       @movies = Movie.all
     end
+  end
+
+  def show
   end
 
   private
