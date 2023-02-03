@@ -13,21 +13,37 @@
         <div class="movie-sub-infos">
           <div>
             <h5>RATING</h5>
-            <p><%= @movie.rating %> / 10</p>
+            <% if @movie.rating == 0 || @movie.rating.nil? %>
+              <p>Unknown</p>
+            <% else %>
+              <p><%= @movie.rating %> / 10</p>
+            <% end %>
           </div>
           <div>
             <h5>RELEASE DATE</h5>
-            <p><%= @movie.release_date %></p>
+            <% if @movie.release_date == 0 || @movie.release_date.nil? %>
+              <p>Unknown</p>
+            <% else %>
+              <p><%= @movie.release_date %></p>
+            <% end %>
           </div>
           <div>
             <h5>DIRECTOR</h5>
-            <p><%= @movie.director %></p>
+            <% if @movie.director == 0 || @movie.director.nil? %>
+              <p>Unknown</p>
+            <% else %>
+              <p><%= @movie.director %></p>
+            <% end %>
           </div>
           <div>
             <h5>RUNNING TIME</h5>
-            <% hours = @movie.run_time / 60 %>
-            <% min = @movie.run_time - hours * 60 %>
-            <p><%= hours %>h <%= min %>m</p>
+            <% if @movie.run_time == 0 || @movie.run_time.nil? %>
+              <p>Unknown</p>
+            <% else %>
+              <% hours = @movie.run_time / 60 %>
+              <% min = @movie.run_time - hours * 60 %>
+              <p><%= hours %>h <%= min %>m</p>
+            <% end %>
           </div>
         </div>
         <div class="business">
@@ -36,7 +52,7 @@
           <% else %>
             <p>Budget: $<%= @movie.formatted_budget %></p>
           <% end %>
-          <% if @movie.revenue == 0 %>
+          <% if @movie.revenue == 0 || @movie.revenue.nil?%>
             <p>Revenue: Unknown</p>
           <% else %>
             <p>Revenue: $<%= @movie.formatted_revenue %></p>
@@ -47,37 +63,45 @@
   </div>
 <div class="small-container-white">
   <h2>Recommanded Movies</h2>
-   <div class="cards-movies">
-    <% @reco_movies.each do |movie| %>
-      <%= link_to movie_path(movie), class: "text-decoration-none" do %>
-        <div class="card-movie">
-          <% if movie.poster_url == ''%>
-            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-          <% else %>
-            <%= image_tag movie.poster_url, alt: "" %>
-          <% end %>
-        </div>
+  <% if @reco_movies == [] %>
+    <p>Sorry, we don't have any recommandation for <%= @movie.title %></p>
+  <% else %>
+    <div class="cards-movies">
+      <% @reco_movies.each do |movie| %>
+        <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+          <div class="card-movie">
+            <% if movie.poster_url == ''%>
+              <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+            <% else %>
+              <%= image_tag movie.poster_url, alt: "" %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
 <div class="small-container-white">
   <h2>Actors</h2>
-  <div class="cards-movies">
-    <% @movie.actors.sort_by { |actor| actor.casts.where(movie: @movie).first.order }.each do |actor| %>
-      <%= link_to actor_path(actor), class: "text-decoration-none" do %>
-        <div class="actor">
-          <div class="card-movie">
-            <% if actor.picture_url == ''%>
-              <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-            <% else %>
-              <%= image_tag actor.picture_url, alt: "" %>
-            <% end %>
+   <% if @movie.actors == [] %>
+    <p>Sorry, we don't have any actor for <%= @movie.title %></p>
+  <% else %>
+    <div class="cards-movies">
+      <% @movie.actors.sort_by { |actor| actor.casts.where(movie: @movie).first.order }.each do |actor| %>
+        <%= link_to actor_path(actor), class: "text-decoration-none" do %>
+          <div class="actor">
+            <div class="card-movie">
+              <% if actor.picture_url == ''%>
+                <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+              <% else %>
+                <%= image_tag actor.picture_url, alt: "" %>
+              <% end %>
+            </div>
+            <h5 class="mt-3"><%= actor.name %></h5>
+            <p class="mb-1"><%= actor.casts.where(movie: @movie).first.character %></p>
           </div>
-          <h5 class="mt-3"><%= actor.name %></h5>
-          <p class="mb-1"><%= actor.casts.where(movie: @movie).first.character %></p>
-        </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
