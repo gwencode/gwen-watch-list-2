@@ -6,10 +6,11 @@ class MoviesController < ApplicationController
   before_action :set_movie, only: %i[show]
 
   def index
+    popular_movies = Movie.where(popular: true).sort_by { |movie| - movie.rating }
     if params[:query].present?
-      @movies = Movie.where('title ILIKE ?', "%#{params[:query]}%")
+      @movies = popular_movies.where('title ILIKE ?', "%#{params[:query]}%")
     else
-      @movies = Movie.all
+      @movies = popular_movies
     end
   end
 

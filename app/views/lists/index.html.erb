@@ -1,18 +1,25 @@
-<div class="banner">
-  <div class="container">
-    <h1 class="text-center">Save any kind of movies</h1>
-    <br>
-  </div>
-</div>
+  <div class="small-container-white-100vh">
+    <h2 class="text-center">My lists</h2>
+    <div class="cards-lists">
 
+    <%= link_to new_list_path, class: "text-decoration-none text-white" do %>
+      <div class="new-list">
+        <h3>Create a new list</h3>
+      </div>
+    <% end %>
 
-<% @lists.each do |list| %>
-  <%= link_to list_path(list), class: "text-decoration-none" do %>
-    <div class="card-list"
-        style="background-image:
-          linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-          url(<% list.image_url %>)">
-      <%= list.name %>
+      <% @lists.each do |list| %>
+        <% backdrop = list.movies.first.backdrop_url%>
+        <%= link_to list_path(list), class: "text-decoration-none" do %>
+          <div class="card-list"
+              style="background-image:
+                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url(<%= backdrop %>)">
+            <h3><%= list.name %></h3>
+          </div>
+        <% end %>
+      <% end %>
     </div>
-  <% end %>
-<% end %>
+  </div>
+
+

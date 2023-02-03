@@ -37,7 +37,8 @@ class Movie < ApplicationRecord
           poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
           backdrop_url: movie['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie['backdrop_path']}",
           release_date: movie['release_date'],
-          api_id: movie['id']
+          api_id: movie['id'],
+          popular: false
         )
         adding_details(new_movie)
         adding_director(new_movie)

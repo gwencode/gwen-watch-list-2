@@ -32,7 +32,8 @@ puts 'Creating movies...'
       backdrop_url: movie['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie['backdrop_path']}",
       rating: movie['vote_average'],
       release_date: movie['release_date'],
-      api_id: movie['id']
+      api_id: movie['id'],
+      popular: true
     )
     url_movie = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}?api_key=#{api_key}&language=en-US"
     movie_details_serialized = URI.open(url_movie).read

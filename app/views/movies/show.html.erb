@@ -61,47 +61,68 @@
       </div>
     </div>
   </div>
+
 <div class="small-container-white">
   <h2>Recommanded Movies</h2>
+
   <% if @reco_movies == [] %>
     <p>Sorry, we don't have any recommandation for <%= @movie.title %></p>
   <% else %>
+
     <div class="cards-movies">
       <% @reco_movies.each do |movie| %>
         <%= link_to movie_path(movie), class: "text-decoration-none" do %>
-          <div class="card-movie">
-            <% if movie.poster_url == ''%>
-              <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-            <% else %>
+
+          <% if movie.poster_url == ''%>
+            <div class="actor">
+              <div class="card-movie">
+                <%= image_tag "oscar.jpg", alt: "" %>
+              </div>
+              <h5 class="py-3"><%= movie.title %></h5>
+            </div>
+
+          <% else %>
+            <div class="card-movie">
               <%= image_tag movie.poster_url, alt: "" %>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
+
         <% end %>
       <% end %>
+
     </div>
   <% end %>
 </div>
+
 <div class="small-container-white">
   <h2>Actors</h2>
-   <% if @movie.actors == [] %>
+
+  <% if @movie.actors == [] %>
     <p>Sorry, we don't have any actor for <%= @movie.title %></p>
+
   <% else %>
     <div class="cards-movies">
       <% @movie.actors.sort_by { |actor| actor.casts.where(movie: @movie).first.order }.each do |actor| %>
         <%= link_to actor_path(actor), class: "text-decoration-none" do %>
           <div class="actor">
             <div class="card-movie">
+
               <% if actor.picture_url == ''%>
                 <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+
               <% else %>
                 <%= image_tag actor.picture_url, alt: "" %>
+
               <% end %>
+
             </div>
+
             <h5 class="mt-3"><%= actor.name %></h5>
-            <p class="mb-1"><%= actor.casts.where(movie: @movie).first.character %></p>
+            <p class="pb-1"><%= actor.casts.where(movie: @movie).first.character %></p>
           </div>
         <% end %>
       <% end %>
     </div>
   <% end %>
+
 </div>
