@@ -10,6 +10,9 @@ require 'json'
 require 'open-uri'
 
 puts 'Cleaning database...'
+Bookmark.destroy_all
+List.destroy_all
+User.destroy_all
 Cast.destroy_all
 Actor.destroy_all
 Movie.destroy_all
@@ -19,8 +22,8 @@ api_key = ENV['API_KEY']
 
 puts 'Creating movies...'
 
-(1..1).to_a.each do |page_index|
-  # change 1 in 36885 to have all pages
+(1..5).to_a.each do |page_index|
+  # change 5 in 36885 to have all pages
   url_page = "#{url}&page=#{page_index}"
   movies_serialized = URI.open(url_page).read
   movies = JSON.parse(movies_serialized)['results']
@@ -43,8 +46,9 @@ puts 'Creating movies...'
     url_credits = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}/credits?api_key=#{api_key}&language=en-US"
     credits_serialized = URI.open(url_credits).read
     crew = JSON.parse(credits_serialized)['crew']
-    director = crew.find { |member| member['job'] == 'Director' }['name']
-    new_movie.update(director: director)
+    director = crew.find { |member| member['job'] == 'Director' }
+    director_name = director.nil? ? '' : director['name']
+    new_movie.update(director: director_name)
   end
   puts "#{Movie.all.count} movies created!"
 end
@@ -80,3 +84,29 @@ end
 
 puts 'Details added to actors!'
 puts "#{Actor.all.count} actors & #{Cast.all.count} casts created!"
+
+puts 'Creating users...'
+gwen = User.create(email: 'gwen@me.com', password: 'password')
+puts '1 User created!'
+
+puts 'Creating lists...'
+fantastic = List.create(name: 'Fantastic', user_id: gwen.id)
+horror = List.create(name: 'Horror', user_id: gwen.id)
+action = List.create(name: 'Action', user_id: gwen.id)
+puts "#{List.all.count} lists created!"
+
+puts 'Creating bookmarks...'
+
+Bookmark.create(movie: Movie.find_by(title: 'Avatar'), list: fantastic)
+Bookmark.create(movie: Movie.find_by(title: 'Avatar: The Way of Water'), list: fantastic)
+Bookmark.create(movie: Movie.find_by(title: 'The Batman'), list: fantastic)
+puts "3 movies added to fantastic list!"
+
+Bookmark.create(movie: Movie.find_by(title: 'Violent Night'), list: horror)
+Bookmark.create(movie: Movie.find_by(title: 'M3GAN'), list: horror)
+puts "2 movies added to horror list!"
+
+Bookmark.create(movie: Movie.find_by(title: 'The Enforcer'), list: action)
+puts "1 movie added to action list!"
+
+puts 'Finished!'

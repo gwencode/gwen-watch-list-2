@@ -75,8 +75,9 @@ class Movie < ApplicationRecord
     api_key = ENV['API_KEY']
     url_credits = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/credits?api_key=#{api_key}&language=en-US"
     credits_serialized = URI.open(url_credits).read
-    credits = JSON.parse(credits_serialized)
-    director = credits['crew'].find { |crew| crew['job'] == 'Director' }
-    movie.update(director: director['name'])
+    crew = JSON.parse(credits_serialized)['crew']
+    director = crew.find { |member| member['job'] == 'Director' }
+    director_name = director.nil? ? '' : director['name']
+    movie.update(director: director_name)
   end
 end

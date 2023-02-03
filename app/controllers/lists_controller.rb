@@ -3,18 +3,17 @@
 # Controller for the List model
 class ListsController < ApplicationController
   before_action :set_list, only: %i[show]
+  before_action :set_user
 
   def index
-    @lists = List.all
+    @lists = @user.lists
   end
 
   def show
-    # @movies = Movie.all
-    @bookmark = Bookmark.new
   end
 
   def new
-    @list = List.new
+    @list = List.new(user: @user)
   end
 
   def create
@@ -29,7 +28,11 @@ class ListsController < ApplicationController
   private
 
   def list_params
-    params.require(:list).permit(:name, :image_url)
+    params.require(:list).permit(:name, :user_id)
+  end
+
+  def set_user
+    @user = current_user
   end
 
   def set_list
