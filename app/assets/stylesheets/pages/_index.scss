@@ -14,6 +14,13 @@ body {
   background-color: $white;
 }
 
+.small-container-black {
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: $white;
+}
+
 .small-container-white-100vh {
   margin: 0 auto;
   padding: 8px 16px 32px;
