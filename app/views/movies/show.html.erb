@@ -1,6 +1,11 @@
-<div class="movie-background"
+<% if @movie.backdrop_url == '' %>
+  <div class="movie-background"
+     style="background-color: black">
+<% else %>
+  <div class="movie-background"
      style="background-image: url(<%= @movie.backdrop_url %>)">
-     <div class="movie-details">
+<% end %>
+    <div class="movie-details">
       <img src="<%= @movie.poster_url %>" alt="" class="poster">
       <div class="movie-infos">
         <h2><%= @movie.title %></h2>
@@ -26,7 +31,7 @@
           </div>
         </div>
         <div class="business">
-          <% if @movie.budget == 0 %>
+          <% if @movie.budget == 0 || @movie.budget.nil? %>
             <p>Budget: Unknown</p>
           <% else %>
             <p>Budget: $<%= @movie.formatted_budget %></p>
@@ -38,7 +43,23 @@
           <% end %>
         </div>
       </div>
-     </div>
+    </div>
+  </div>
+<div class="small-container-white">
+  <h2>Recommanded Movies</h2>
+   <div class="cards-movies">
+    <% @reco_movies.each do |movie| %>
+      <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+        <div class="card-movie">
+          <% if movie.poster_url == ''%>
+            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+          <% else %>
+            <%= image_tag movie.poster_url, alt: "" %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>
 <div class="small-container-white">
   <h2>Actors</h2>

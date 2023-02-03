@@ -23,7 +23,11 @@
     <% @movies.each do |movie| %>
       <%= link_to movie_path(movie), class: "text-decoration-none" do %>
         <div class="card-movie">
-          <%= image_tag movie.poster_url, alt: "" %>
+          <% if movie.poster_url == ''%>
+            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+          <% else %>
+            <%= image_tag movie.poster_url, alt: "" %>
+          <% end %>
         </div>
       <% end %>
     <% end %>

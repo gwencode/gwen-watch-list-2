@@ -14,6 +14,7 @@ class MoviesController < ApplicationController
   end
 
   def show
+    @reco_movies = @movie.reco_movies
   end
 
   private
