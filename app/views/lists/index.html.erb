@@ -3,14 +3,18 @@
     <div class="cards-lists">
       <% @lists.each do |list| %>
         <% backdrop = list.movies.first.backdrop_url%>
-        <%= link_to list_path(list), class: "text-decoration-none" do %>
-          <div class="card-list"
-              style="background-image:
-                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                url(<%= backdrop %>)">
+        <div class="card-list"
+             style="background-image:
+             linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+             url(<%= backdrop %>)">
+          <%= link_to list_path(list), class: "text-decoration-none" do %>
             <h3><%= list.name %></h3>
-          </div>
-        <% end %>
+            <%= link_to raw("<i class='fa-solid fa-trash-can'></i>"),
+                        list_path(list),
+                        data: {turbo_method: :delete, turbo_confirm: "Remove this list?"},
+                        class: "text-decoration-none destroy-icon" %>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </div>
