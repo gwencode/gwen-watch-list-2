@@ -20,7 +20,7 @@
           <%= link_to raw("<i class='fa-solid fa-trash-can'></i>"),
                       movie_bookmark_path(movie, bookmark),
                       data: {turbo_method: :delete, turbo_confirm: "Remove this movie from the list?"},
-                      class: "text-decoration-none destroy-icon" %>
+                      class: "text-decoration-none destroy-icon-bookmark" %>
         <% end %>
       </div>
     <% end %>

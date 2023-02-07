@@ -1,4 +1,15 @@
-.destroy-icon {
+.destroy-icon-list {
+  position: absolute;
+  left: 4%;
+  top: 4%;
+  color: $red;
+
+  &:hover {
+    color: $dark-red;
+  }
+}
+
+.destroy-icon-bookmark {
   position: absolute;
   left: 5%;
   top: 2%;
