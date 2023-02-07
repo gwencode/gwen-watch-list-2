@@ -1,15 +1,13 @@
-<div class="small-container-white d-flex flex-column align-items-center">
+<% backdrop = @list.movies.first.backdrop_url%>
+<div class="small-container-white-100vh d-flex flex-column align-items-center"
+     style="background-image:
+            linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+            url(<%= backdrop %>);
+            background-size: cover">
 
-  <h2>My list: <%= @list.name %></h2>
+  <h2 class="text-white">My list: <%= @list.name %></h2>
 
-  <div class="cards-movies">
-
-  <%= link_to new_list_path, class: "text-decoration-none text-white" do %>
-    <div class="card-movie new-movie">
-      <h3>Add a movie to my list</h3>
-    </div>
-  <% end %>
-
+  <div class="cards-movies my-2">
     <% @list.movies.each do |movie| %>
       <%= link_to movie_path(movie), class: "text-decoration-none" do %>
         <div class="card-movie">
