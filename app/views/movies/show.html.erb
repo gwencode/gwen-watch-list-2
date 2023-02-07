@@ -59,10 +59,21 @@
           <% end %>
         </div>
         <div class="add-to-list">
-          <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
-          <%= f.association :list %>
-          <div class="text-center"><%= f.submit "Add Movie to this list", class: "btn btn-success" %></div>
-        <% end %>
+          <div class="text-center">
+            <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
+              <%= f.association :list, label: "Add this movie to a list", required: false %>
+              <div class="text-center"><%= f.submit "Add to this list", class: "btn btn-light" %></div>
+          <% end %>
+        </div>
+          <%#  A simple_form_for to create a new list and new bookmark with the movie %>
+          <div class="text-center">
+            <%= simple_form_for(@list, as: :list, method: :post, url: lists_path) do |f| %>
+              <%= f.input :name, label: "Or create a new list", required: false %>
+              <%# hidden field movie %>
+              <%= f.input :movie_id, as: :hidden, input_html: { value: @movie.id } %>
+              <div class="text-center"><%= f.submit "Create a new list", class: "btn btn-light" %></div>
+            <% end %>
+          </div>
     </div>
         </div>
       </div>

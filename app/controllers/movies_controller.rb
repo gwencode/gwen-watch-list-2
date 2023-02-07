@@ -2,8 +2,9 @@
 
 # Controller for the Movie model
 class MoviesController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[index show]
+  skip_before_action :authenticate_user!, only: %i[index]
   before_action :set_movie, only: %i[show]
+  before_action :set_user, only: %i[show]
 
   def index
     # get_movies
@@ -18,12 +19,17 @@ class MoviesController < ApplicationController
   def show
     @reco_movies = @movie.reco_movies
     @bookmark = Bookmark.new
+    @list = List.new(user_id: @user)
   end
 
   private
 
   def set_movie
     @movie = Movie.find(params[:id])
+  end
+
+  def set_user
+    @user = current_user
   end
 
   # def get_movies

@@ -12,23 +12,27 @@ class ListsController < ApplicationController
   def show
   end
 
-  def new
-    @list = List.new(user: @user)
-  end
-
   def create
-    @list = List.new(list_params)
-    if @list.save
-      redirect_to root_path
+    name = list_params[:name]
+    movie_id = list_params[:movie_id].to_i
+
+    list = List.new(name: name, user_id: @user.id)
+    if list.save
+      bookmark = Bookmark.new(list: list, movie_id: movie_id)
+      if bookmark.save
+        redirect_to list_path(list)
+      else
+        render 'movies/show'
+      end
     else
-      render :new
+      render 'movies/show'
     end
   end
 
   private
 
   def list_params
-    params.require(:list).permit(:name, :user_id)
+    params.require(:list).permit(:name, :movie_id)
   end
 
   def set_user
