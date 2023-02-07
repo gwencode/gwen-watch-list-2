@@ -14,6 +14,18 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def destroy
+    bookmark = Bookmark.find(params[:id])
+    list = bookmark.list
+    bookmark.destroy
+    if list.bookmarks.empty?
+      list.destroy
+      redirect_to lists_path
+    else
+      redirect_to list_path(list)
+    end
+  end
+
   private
 
   def set_movie

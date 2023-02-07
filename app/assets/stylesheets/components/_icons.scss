@@ -1,0 +1,10 @@
+.destroy-icon {
+  position: absolute;
+  left: 5%;
+  top: 2%;
+  color: $red;
+
+  &:hover {
+    color: $dark-red;
+  }
+}

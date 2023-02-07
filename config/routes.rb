@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "articles#index"
   root 'movies#index'
   resources :movies, only: %i[show] do
-    resources :bookmarks, only: %i[create]
+    resources :bookmarks, only: %i[create destroy]
   end
   resources :actors, only: %i[show]
   resources :lists, only: %i[index show create]
