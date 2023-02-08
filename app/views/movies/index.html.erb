@@ -6,18 +6,18 @@
 </div>
 <div class="search-container">
     <%= form_with url: root_path, method: :get, class: "search-form" do %>
-    <div class="d-flex align-items-center">
+    <div class="search-title">
       <i class="fa-solid fa-magnifying-glass search-icon"></i>
       <%= text_field_tag :query,
         params[:query],
         class: "search-field",
-        placeholder: "Search..."
+        placeholder: "Title..."
       %>
     </div>
      <div class="form-group">
-      <%= select_tag :genre, options_from_collection_for_select(Genre.all, :id, :name), prompt: "Filter by genre", class: "form-control" %>
+      <%= select_tag :genre, options_from_collection_for_select(Genre.all, :id, :name), prompt: "Filter by genre", class: "form-control btn-ghost-search" %>
     </div>
-    <%= submit_tag "Search", class: "btn-ghost" %>
+    <%= submit_tag "Search", class: "btn btn-white" %>
     <% end %>
 
 </div>

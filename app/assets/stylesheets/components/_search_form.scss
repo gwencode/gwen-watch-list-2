@@ -1,6 +1,6 @@
 .search-container {
   margin: 0 auto;
-  padding: 8px;
+  padding: 4px;
   background-color: $dark-gray;
 }
 
@@ -15,6 +15,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 32px;
+}
+
+.search-title {
+  display: flex;
+  align-items: center;
+  max-width: 50%;
 }
 
 .search-field {
@@ -32,3 +38,21 @@
 }
 
 
+@media(max-width: 576px) {
+  .search-form {
+    padding: 8px;
+  }
+
+  .search-title {
+    max-width: 35%;
+  }
+
+  .search-field {
+    font-size: 18px;
+  }
+
+  .search-icon {
+    font-size: 22px;
+    margin-right: 4px;
+  }
+}
