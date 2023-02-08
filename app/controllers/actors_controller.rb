@@ -1,6 +1,10 @@
 class ActorsController < ApplicationController
-  skip_before_action :authenticate_user!, only: :show
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_actor, only: [:show]
+
+  def index
+    @actors = Actor.all.reject { |actor| actor.picture_url.empty? || actor.biography.empty? }
+  end
 
   def show
     popular_movies = @actor.movies.where(popular: true)

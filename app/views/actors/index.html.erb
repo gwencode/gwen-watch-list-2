@@ -1,0 +1,25 @@
+<div class="small-container-white">
+  <h2>Popular Actors</h2>
+    <div class="cards-movies">
+      <% @actors.sort_by { |actor| actor.name }.each do |actor| %>
+        <%= link_to actor_path(actor), class: "text-decoration-none" do %>
+          <div class="actor">
+            <div class="card-movie">
+
+              <% if actor.picture_url == ''%>
+                <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+
+              <% else %>
+                <%= image_tag actor.picture_url, alt: "" %>
+
+              <% end %>
+
+            </div>
+
+            <h5 class="py-3"><%= actor.name %></h5>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+</div>

@@ -11,6 +11,6 @@ Rails.application.routes.draw do
   resources :movies, only: %i[show] do
     resources :bookmarks, only: %i[create destroy]
   end
-  resources :actors, only: %i[show]
+  resources :actors, only: %i[index show]
   resources :lists, only: %i[index show create destroy]
 end
