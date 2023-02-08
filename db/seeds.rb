@@ -11,19 +11,32 @@ require 'open-uri'
 
 puts 'Cleaning database...'
 Bookmark.destroy_all
+MovieGenre.destroy_all
 List.destroy_all
 User.destroy_all
 Cast.destroy_all
 Actor.destroy_all
 Movie.destroy_all
+Genre.destroy_all
 
 url = ENV['API_URL']
 api_key = ENV['API_KEY']
 
+puts 'Creating genres...'
+
+url_genres = "https://api.themoviedb.org/3/genre/movie/list?api_key=#{api_key}&language=en-US"
+genres_serialized = URI.open(url_genres).read
+genres = JSON.parse(genres_serialized)['genres']
+genres.each do |genre|
+  Genre.create(name: genre['name'], api_id: genre['id'])
+end
+
+puts "#{Genre.count} genres created!"
+
 puts 'Creating movies...'
 
-(1..5).to_a.each do |page_index|
-  # change 5 in 36885 to have all pages
+(1..2).to_a.each do |page_index|
+  # change 2 in 36885 to have all pages
   url_page = "#{url}&page=#{page_index}"
   movies_serialized = URI.open(url_page).read
   movies = JSON.parse(movies_serialized)['results']
@@ -38,6 +51,11 @@ puts 'Creating movies...'
       api_id: movie['id'],
       popular: true
     )
+
+    movie['genre_ids'].each do |genre_id|
+      MovieGenre.create(movie: new_movie, genre: Genre.find_by(api_id: genre_id))
+    end
+
     url_movie = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}?api_key=#{api_key}&language=en-US"
     movie_details_serialized = URI.open(url_movie).read
     movie_details = JSON.parse(movie_details_serialized)
@@ -50,7 +68,7 @@ puts 'Creating movies...'
     director_name = director.nil? ? '' : director['name']
     new_movie.update(director: director_name)
   end
-  puts "#{Movie.all.count} movies created!"
+  puts "#{Movie.count} movies created!"
 end
 
 puts 'Creating actors and casts...'
@@ -83,7 +101,7 @@ Actor.all.each do |actor|
 end
 
 puts 'Details added to actors!'
-puts "#{Actor.all.count} actors & #{Cast.all.count} casts created!"
+puts "#{Actor.count} actors & #{Cast.count} casts created!"
 
 puts 'Creating users...'
 gwen = User.create(email: 'gwen@me.com', password: 'password')
@@ -93,7 +111,7 @@ puts 'Creating lists...'
 fantastic = List.create(name: 'Fantastic', user_id: gwen.id)
 horror = List.create(name: 'Horror', user_id: gwen.id)
 action = List.create(name: 'Action', user_id: gwen.id)
-puts "#{List.all.count} lists created!"
+puts "#{List.count} lists created!"
 
 puts 'Creating bookmarks...'
 
