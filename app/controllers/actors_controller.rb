@@ -3,7 +3,13 @@ class ActorsController < ApplicationController
   before_action :set_actor, only: [:show]
 
   def index
-    @actors = Actor.all.reject { |actor| actor.picture_url.empty? || actor.biography.empty? }
+    if params[:query].present?
+      actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
+      @actors = actors.reject { |actor| actor.picture_url.empty? || actor.biography.empty? }
+    else
+      @actors = Actor.all.reject { |actor| actor.picture_url.empty? || actor.biography.empty? }
+    end
+
   end
 
   def show
