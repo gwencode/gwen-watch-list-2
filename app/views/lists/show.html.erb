@@ -5,7 +5,7 @@
             url(<%= backdrop %>);
             background-size: cover">
 
-  <h2 class="text-white">My list: <%= @list.name %></h2>
+  <h2 class="text-white">My "<%= @list.name %>" movies</h2>
 
   <div class="cards-movies my-2">
     <% @list.movies.each do |movie| %>

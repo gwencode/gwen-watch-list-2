@@ -2,7 +2,7 @@
 
 # Controller for the Movie model
 class MoviesController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[index]
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_movie, only: %i[show]
   before_action :set_user, only: %i[show]
 

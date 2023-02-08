@@ -1,70 +1,72 @@
 <% if @movie.backdrop_url == '' %>
-  <div class="movie-background"
-     style="background-color: black">
+<div class="movie-background"
+    style="background-color: black">
 <% else %>
-  <div class="movie-background"
-     style="background-image: url(<%= @movie.backdrop_url %>)">
+<div class="movie-background"
+    style="background-image: url(<%= @movie.backdrop_url %>)">
 <% end %>
-    <div class="movie-details">
-      <img src="<%= @movie.poster_url %>" alt="" class="poster">
-      <div class="movie-infos">
-        <h2><%= @movie.title %></h2>
-        <p><%= @movie.overview %></p>
-        <div class="movie-sub-infos">
-          <div>
-            <h5>RATING</h5>
-            <% if @movie.rating == 0 || @movie.rating.nil? %>
-              <p>Unknown</p>
-            <% else %>
-              <p><%= @movie.rating %> / 10</p>
-            <% end %>
-          </div>
-          <div>
-            <h5>RELEASE DATE</h5>
-            <% if @movie.release_date == 0 || @movie.release_date.nil? %>
-              <p>Unknown</p>
-            <% else %>
-              <p><%= @movie.release_date %></p>
-            <% end %>
-          </div>
-          <div>
-            <h5>DIRECTOR</h5>
-            <% if @movie.director == 0 || @movie.director.nil? %>
-              <p>Unknown</p>
-            <% else %>
-              <p><%= @movie.director %></p>
-            <% end %>
-          </div>
-          <div>
-            <h5>RUNNING TIME</h5>
-            <% if @movie.run_time == 0 || @movie.run_time.nil? %>
-              <p>Unknown</p>
-            <% else %>
-              <% hours = @movie.run_time / 60 %>
-              <% min = @movie.run_time - hours * 60 %>
-              <p><%= hours %>h <%= min %>m</p>
-            <% end %>
-          </div>
-        </div>
-        <div class="business">
-          <% if @movie.budget == 0 || @movie.budget.nil? %>
-            <p>Budget: Unknown</p>
+
+  <div class="movie-details">
+    <img src="<%= @movie.poster_url %>" alt="" class="poster">
+    <div class="movie-infos">
+      <h2><%= @movie.title %></h2>
+      <p><%= @movie.overview %></p>
+      <div class="movie-sub-infos">
+        <div>
+          <h5>RATING</h5>
+          <% if @movie.rating == 0 || @movie.rating.nil? %>
+            <p>Unknown</p>
           <% else %>
-            <p>Budget: $<%= @movie.formatted_budget %></p>
-          <% end %>
-          <% if @movie.revenue == 0 || @movie.revenue.nil?%>
-            <p>Revenue: Unknown</p>
-          <% else %>
-            <p>Revenue: $<%= @movie.formatted_revenue %></p>
+            <p><%= @movie.rating %> / 10</p>
           <% end %>
         </div>
+        <div>
+          <h5>RELEASE DATE</h5>
+          <% if @movie.release_date == 0 || @movie.release_date.nil? %>
+            <p>Unknown</p>
+          <% else %>
+            <p><%= @movie.release_date %></p>
+          <% end %>
+        </div>
+        <div>
+          <h5>DIRECTOR</h5>
+          <% if @movie.director == 0 || @movie.director.nil? %>
+            <p>Unknown</p>
+          <% else %>
+            <p><%= @movie.director %></p>
+          <% end %>
+        </div>
+        <div>
+          <h5>RUNNING TIME</h5>
+          <% if @movie.run_time == 0 || @movie.run_time.nil? %>
+            <p>Unknown</p>
+          <% else %>
+            <% hours = @movie.run_time / 60 %>
+            <% min = @movie.run_time - hours * 60 %>
+            <p><%= hours %>h <%= min %>m</p>
+          <% end %>
+        </div>
+      </div>
+      <div class="business">
+        <% if @movie.budget == 0 || @movie.budget.nil? %>
+          <p>Budget: Unknown</p>
+        <% else %>
+          <p>Budget: $<%= @movie.formatted_budget %></p>
+        <% end %>
+        <% if @movie.revenue == 0 || @movie.revenue.nil?%>
+          <p>Revenue: Unknown</p>
+        <% else %>
+          <p>Revenue: $<%= @movie.formatted_revenue %></p>
+        <% end %>
+      </div>
+      <% if current_user %>
         <div class="add-to-list">
           <div class="text-center">
             <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
               <%= f.association :list, label: "Add this movie to a list", required: false %>
               <div class="text-center"><%= f.submit "Add to this list", class: "btn btn-light" %></div>
           <% end %>
-        </div>
+          </div>
           <%#  A simple_form_for to create a new list and new bookmark with the movie %>
           <div class="text-center">
             <%= simple_form_for(@list, as: :list, method: :post, url: lists_path) do |f| %>
@@ -74,11 +76,11 @@
               <div class="text-center"><%= f.submit "Create a new list", class: "btn btn-light" %></div>
             <% end %>
           </div>
-    </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
+</div>
 
 <div class="small-container-white">
   <h2>Recommanded Movies</h2>
