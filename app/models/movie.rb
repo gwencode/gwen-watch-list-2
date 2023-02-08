@@ -7,7 +7,8 @@ class Movie < ApplicationRecord
   has_many :lists, through: :bookmarks
   has_many :casts
   has_many :actors, through: :casts
-  belongs_to :genre, optional: true
+  has_many :movie_genres
+  has_many :genres, through: :movie_genres
 
   validates :title, presence: true, uniqueness: true
 
