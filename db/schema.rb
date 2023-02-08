@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_153330) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_08_110257) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_153330) do
     t.index ["movie_id"], name: "index_casts_on_movie_id"
   end
 
+  create_table "genres", force: :cascade do |t|
+    t.string "name"
+    t.integer "api_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "lists", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -67,6 +74,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_153330) do
     t.integer "run_time"
     t.bigint "revenue"
     t.boolean "popular", default: false
+    t.bigint "genre_id"
+    t.index ["genre_id"], name: "index_movies_on_genre_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -86,4 +95,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_153330) do
   add_foreign_key "casts", "actors"
   add_foreign_key "casts", "movies"
   add_foreign_key "lists", "users"
+  add_foreign_key "movies", "genres"
 end
