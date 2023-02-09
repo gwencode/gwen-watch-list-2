@@ -1,0 +1,16 @@
+<div class="small-container-dark-gray-100vh d-flex flex-column align-items-center">
+  <h2 class="text-white text-center">All movies in my lists</h2>
+  <div class="cards-movies my-2">
+    <% @movies.each do |movie| %>
+      <div class="card-movie">
+        <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+          <% if movie.poster_url == ''%>
+            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+          <% else %>
+            <%= image_tag movie.poster_url, alt: "" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
