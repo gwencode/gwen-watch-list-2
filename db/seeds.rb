@@ -35,8 +35,8 @@ puts "#{Genre.count} genres created!"
 
 puts 'Creating movies...'
 
-(1..2).to_a.each do |page_index|
-  # change 2 in 36885 to have all pages
+(1..100).to_a.each do |page_index|
+  # change 100 in 36885 to have all pages
   url_page = "#{url}&page=#{page_index}"
   movies_serialized = URI.open(url_page).read
   movies = JSON.parse(movies_serialized)['results']
@@ -51,9 +51,12 @@ puts 'Creating movies...'
       api_id: movie['id'],
       popular: true
     )
+    next if new_movie.id.nil?
 
-    movie['genre_ids'].each do |genre_id|
-      MovieGenre.create(movie: new_movie, genre: Genre.find_by(api_id: genre_id))
+    unless movie['genre_ids'].nil?
+      movie['genre_ids'].each do |genre_id|
+        MovieGenre.create(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
+      end
     end
 
     url_movie = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}?api_key=#{api_key}&language=en-US"
@@ -87,6 +90,8 @@ Movie.all.each do |movie|
                 order: cast['order'],
                 actor_api_id: cast['id'])
   end
+  puts "#{Actor.count} actors created!"
+  puts "#{Cast.count} casts created!"
 end
 
 puts 'Actors and casts created!'
@@ -98,6 +103,7 @@ Actor.all.each do |actor|
   actor_details = JSON.parse(actor_details_serialized)
   actor.update(biography: actor_details['biography'],
                picture_url: actor_details['profile_path'].nil? ? '' : "https://image.tmdb.org/t/p/w780#{actor_details['profile_path']}")
+  puts "#{actor.name} (#{actor.id}) updated!"
 end
 
 puts 'Details added to actors!'
