@@ -33,12 +33,17 @@
   border-radius: 20px;
 }
 
-.two-inline-devise-inputs {
+.two-inline-inputs {
   display: flex;
   gap: 16px;
   justify-content: space-between;
+
+  .two-inline-input {
+    width: 50%;
+  }
 }
 
 .inline-input {
   width: 50%;
+  text-align: start;
 }
