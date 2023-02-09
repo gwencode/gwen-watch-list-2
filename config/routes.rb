@@ -12,5 +12,5 @@ Rails.application.routes.draw do
     resources :bookmarks, only: %i[create destroy]
   end
   resources :actors, only: %i[index show]
-  resources :lists, only: %i[index show create destroy]
+  resources :lists, only: %i[index show create destroy edit update]
 end

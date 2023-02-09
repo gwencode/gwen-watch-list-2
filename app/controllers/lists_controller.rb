@@ -2,7 +2,7 @@
 
 # Controller for the List model
 class ListsController < ApplicationController
-  before_action :set_list, only: %i[show destroy]
+  before_action :set_list, only: %i[show destroy edit update]
   before_action :set_user
 
   def index
@@ -32,6 +32,15 @@ class ListsController < ApplicationController
   def destroy
     @list.destroy
     redirect_to lists_path
+  end
+
+  def edit
+  end
+
+  def update
+    new_name = list_params[:name]
+    @list.update(name: new_name)
+    redirect_to list_path(@list)
   end
 
   private

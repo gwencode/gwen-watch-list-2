@@ -5,7 +5,24 @@
             url(<%= backdrop %>);
             background-size: cover">
 
-  <h2 class="text-white">My "<%= @list.name %>" movies</h2>
+  <div class="d-flex align-items-center gap-3">
+    <h2 class="text-white">My "<%= @list.name %>" movies</h2>
+    <%= link_to raw("<i class='fa-regular fa-pen-to-square'></i>"),
+                      edit_list_path(@list),
+                      class: "text-decoration-none text-white" %>
+  </div>
+  <div class="devise-background d-none">
+    <div class="devise-form">
+      <%= form_with model: @list do |f| %>
+        <div class="form-inputs">
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+        <div class="form-actions my-4">
+          <%= f.submit "Change name of the list", class: "btn-light btn-devise" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
   <div class="cards-movies my-2">
     <% @list.movies.each do |movie| %>
