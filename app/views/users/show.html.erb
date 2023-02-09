@@ -1,2 +1,26 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<div class="container col-12 col-md-6 col-lg-4 user-profile">
+
+  <div class="d-flex align-items-center gap-3">
+    <h2 class="text-white text-center">My profile</h2>
+    <%= link_to raw("<i class='fa-regular fa-pen-to-square edit-icon-list'></i>"),
+                edit_user_registration_path %>
+  </div>
+
+  <h5>First name</h5>
+  <% if @user.first_name.nil? %>
+    <p>Unknown</p>
+  <% else %>
+    <p><%= @user.first_name %></p>
+  <% end %>
+
+  <h5>Last name</h5>
+  <% if @user.last_name.nil? %>
+    <p>Unknown</p>
+  <% else %>
+    <p><%= @user.last_name %></p>
+  <% end %>
+
+  <h5>Email</h5>
+  <p><%= @user.email %></p>
+
+</div>

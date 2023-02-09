@@ -1,26 +1,51 @@
 <div class="devise-background">
-  <div class="container col-12 col-md-6 col-lg-4 devise-form">
+  <div class="container col-12 col-md-6 col-lg-6 devise-form">
     <h2>Edit my profile</h2>
 
     <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <%= f.error_notification %>
 
-      <div class="form-inputs">
-        <%= f.input :email, required: true, autofocus: true %>
+      <div class="form-inputs text-start">
+
+        <div class="inline-input">
+          <%= f.input :email, required: true, autofocus: true %>
+        </div>
 
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
           <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
         <% end %>
 
-        <%= f.input :password,
-                    label: "New password",
-                    hint: "Leave it blank if you don't want to change it",
-                    required: false,
-                    input_html: { autocomplete: "new-password" } %>
-        <%= f.input :password_confirmation,
-                    hint: "Confirm your new password",
-                    required: false,
-                    input_html: { autocomplete: "new-password" } %>
+        <div class="two-inline-devise-inputs">
+          <div class="inline-input">
+            <%= f.input :first_name,
+                        label: "First name",
+                        placeholder: @user.first_name,
+                        required: false %>
+          </div>
+          <div class="inline-input">
+            <%= f.input :last_name,
+                        label: "Last name",
+                        placeholder: @user.last_name,
+                        required: false %>
+          </div>
+        </div>
+
+        <div class="two-inline-devise-inputs">
+          <div class="inline-input">
+            <%= f.input :password,
+                        label: "New password",
+                        hint: "Leave it blank if you don't want to change it",
+                        required: false,
+                        input_html: { autocomplete: "new-password" } %>
+          </div>
+          <div class="inline-input">
+            <%= f.input :password_confirmation,
+                        hint: "Confirm your new password",
+                        required: false,
+                        input_html: { autocomplete: "new-password" } %>
+          </div>
+        </div>
+
         <%= f.input :current_password,
                     hint: "Enter your current password to confirm your changes",
                     required: true,

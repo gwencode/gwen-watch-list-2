@@ -25,3 +25,20 @@
   display: flex;
   justify-content: space-around;
 }
+
+.user-profile {
+  color: $white;
+  padding: 0 16px 8px 16px;
+  background-color: $dark-gray;
+  border-radius: 20px;
+}
+
+.two-inline-devise-inputs {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.inline-input {
+  width: 50%;
+}
