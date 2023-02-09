@@ -16,7 +16,7 @@ class MoviesController < ApplicationController
       popular_movies = popular_movies.joins(:genres).where(genres: { id: params[:genre].to_i })
     end
 
-    @movies = popular_movies.sort_by { |movie| - movie.rating }
+    @movies = popular_movies.sort_by { |movie| movie.id }
   end
 
   def show
