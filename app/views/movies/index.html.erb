@@ -21,19 +21,24 @@
     <% end %>
 
 </div>
-<div class="small-container-white">
+<div class="small-container-white" data-controller="load-more">
   <h2>Popular Movies</h2>
   <div class="cards-movies">
     <% @movies.each do |movie| %>
-      <%= link_to movie_path(movie), class: "text-decoration-none" do %>
-        <div class="card-movie">
-          <% if movie.poster_url == ''%>
-            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-          <% else %>
-            <%= image_tag movie.poster_url, alt: "" %>
-          <% end %>
-        </div>
-      <% end %>
+      <div class="d-none" data-load-more-target="movie">
+        <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+          <div class="card-movie">
+            <% if movie.poster_url == ''%>
+              <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+            <% else %>
+              <%= image_tag movie.poster_url, alt: "" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
+  </div>
+  <div class="text-center mt-3">
+    <button class="button-black" role="button" data-action="click->load-more#loadMore">Load more</button>
   </div>
 </div>

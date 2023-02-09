@@ -9,3 +9,6 @@ application.register("edit-list", EditListController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import LoadMoreController from "./load_more_controller"
+application.register("load-more", LoadMoreController)
