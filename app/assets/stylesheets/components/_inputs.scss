@@ -1,0 +1,11 @@
+.input-list {
+  color: $white;
+  background-color: $black;
+  font-family: $headers-font;
+
+   &:focus {
+    color: $white;
+    background-color: $black;
+    font-family: $headers-font;
+  }
+}
