@@ -1,23 +1,23 @@
 <% backdrop = @list.movies.first.backdrop_url%>
 <div class="small-container-white-100vh d-flex flex-column align-items-center"
+     data-controller="edit-list"
      style="background-image:
             linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
             url(<%= backdrop %>);
             background-size: cover">
 
   <div class="d-flex align-items-center gap-3">
-    <h2 class="text-white">My "<%= @list.name %>" movies</h2>
-    <%= link_to raw("<i class='fa-regular fa-pen-to-square'></i>"),
-                      edit_list_path(@list),
-                      class: "text-decoration-none text-white" %>
+    <h2 class="text-white text-center">My "<%= @list.name %>" movies</h2>
+    <i class='fa-regular fa-pen-to-square edit-icon-list' data-action="click->edit-list#displayForm"></i>
   </div>
-  <div class="devise-background d-none">
-    <div class="devise-form">
+
+  <div class="devise-background d-none" data-edit-list-target="form">
+    <div class="devise-form m-0">
       <%= form_with model: @list do |f| %>
         <div class="form-inputs">
           <%= f.text_field :name, class: "form-control" %>
         </div>
-        <div class="form-actions my-4">
+        <div class="form-actions mt-4">
           <%= f.submit "Change name of the list", class: "btn-light btn-devise" %>
         </div>
       <% end %>
