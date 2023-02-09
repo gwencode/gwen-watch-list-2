@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'users/show'
   get 'my_movies/index'
   devise_for :users
   # get 'actors/show'
@@ -15,4 +16,5 @@ Rails.application.routes.draw do
   resources :actors, only: %i[index show]
   resources :lists, only: %i[index show create destroy update]
   resources :my_movies, only: %i[index]
+  resources :users, only: %i[show]
 end
