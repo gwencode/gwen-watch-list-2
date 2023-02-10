@@ -14,9 +14,10 @@
     <%= submit_tag "Search", class: "btn btn-white" %>
     <% end %>
 </div>
-<div class="small-container-white">
-    <div class="cards-movies">
-      <% @actors.sort_by { |actor| actor.name }.each do |actor| %>
+<div class="small-container-white" data-controller="load-actors">
+  <div class="cards-movies">
+    <% @actors.sort_by { |actor| actor.name }.each do |actor| %>
+      <div class="d-none" data-load-actors-target="actor">
         <%= link_to actor_path(actor), class: "text-decoration-none" do %>
           <div class="actor">
             <div class="card-movie">
@@ -34,7 +35,17 @@
             <h5 class="py-3"><%= actor.name %></h5>
           </div>
         <% end %>
-      <% end %>
-    </div>
-
+      </div>
+    <% end %>
+  </div>
+  <div class="text-center mt-3">
+    <button class="button-black-large" role="button"
+            data-action="click->load-actors#loadMore"
+            data-load-actors-target="button">
+      Load more
+    </button>
+  </div>
 </div>
+<script>
+  var actorCount = <%= @actors.count %>;
+</script>

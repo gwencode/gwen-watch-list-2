@@ -13,5 +13,8 @@ application.register("edit-list", EditListController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import LoadActorsController from "./load_actors_controller"
+application.register("load-actors", LoadActorsController)
+
 import LoadMoreController from "./load_more_controller"
 application.register("load-more", LoadMoreController)
