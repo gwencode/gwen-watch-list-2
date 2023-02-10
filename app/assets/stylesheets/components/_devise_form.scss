@@ -27,10 +27,12 @@
 }
 
 .user-profile {
+  margin-top: 16px;
   color: $white;
   padding: 0 16px 8px 16px;
   background-color: $dark-gray;
   border-radius: 20px;
+  position: relative;
 }
 
 .two-inline-inputs {
