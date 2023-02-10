@@ -39,6 +39,13 @@
     <% end %>
   </div>
   <div class="text-center mt-3">
-    <button class="button-black" role="button" data-action="click->load-more#loadMore">Load more</button>
+    <button class="button-black-large" role="button"
+            data-action="click->load-more#loadMore"
+            data-load-more-target="button">
+      Load more
+    </button>
   </div>
 </div>
+<script>
+  var movieCount = <%= @movies.count %>;
+</script>

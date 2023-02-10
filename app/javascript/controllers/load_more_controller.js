@@ -7,31 +7,31 @@ export default class extends Controller {
   connect() {
     this.currentPage = 1
     this.perPage = 20
-    // this.maxPages = Math.ceil(this.moviesTarget.dataset.total / this.perPage)
-    // this.updateButton()
     this.loadPage()
   }
 
   loadMore(event) {
     event.preventDefault()
     this.currentPage++
-    // this.updateButton()
     this.loadPage()
   }
 
-  // updateButton() {
-  //   if (this.currentPage >= this.maxPages) {
-  //     this.buttonTarget.classList.add("d-none")
-  //   }
-  // }
-
   loadPage() {
     const maxMovies = this.currentPage * this.perPage
+
+    if (maxMovies >= movieCount) {
+      this.updateButton()
+    }
+
     const movies = this.movieTargets
     movies.forEach((movie, index) => {
       if (index < maxMovies) {
         movie.classList.remove("d-none")
       }
     })
+  }
+
+  updateButton() {
+    this.buttonTarget.classList.add("d-none")
   }
 }
