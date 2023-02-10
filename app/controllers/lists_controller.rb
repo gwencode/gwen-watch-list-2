@@ -15,17 +15,21 @@ class ListsController < ApplicationController
   def create
     name = list_params[:name]
     movie_id = list_params[:movie_id].to_i
-
+    @movie = Movie.find(movie_id)
     list = List.new(name: name, user_id: @user.id)
-    if list.save
+
+    if List.exists?(name: name, user_id: @user.id)
+      flash[:error] = 'Name already taken'
+      redirect_to movie_path(@movie)
+    elsif list.save
       bookmark = Bookmark.new(list: list, movie_id: movie_id)
       if bookmark.save
         redirect_to list_path(list)
       else
-        render 'movies/show'
+        redirect_to movie_path(@movie)
       end
     else
-      render 'movies/show'
+      redirect_to movie_path(@movie)
     end
   end
 

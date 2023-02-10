@@ -63,17 +63,24 @@
         <div class="add-to-list">
           <div class="text-center">
             <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
-              <%= f.association :list, label: "Add this movie to a list", input_html: { class: 'input-list' }, required: false %>
+              <%= f.association :list, collection: @lists, label: "Add this movie to a list", input_html: { class: 'input-list' }, required: false %>
               <div class="text-center"><%= f.submit "Add to this list", class: "btn-ghost" %></div>
-          <% end %>
+            <% end %>
           </div>
           <%#  A simple_form_for to create a new list and new bookmark with the movie %>
           <div class="text-center">
             <%= simple_form_for(@list, as: :list, method: :post, url: lists_path) do |f| %>
-              <%= f.input :name, label: "Or create a new list", input_html: { class: 'input-list' }, required: false %>
+              <%= f.input :name, label: "Or create a new list", placeholder: "Name...", input_html: { class: 'input-list' }, required: false %>
               <%# hidden field movie %>
               <%= f.input :movie_id, as: :hidden, input_html: { value: @movie.id } %>
-              <div class="text-center"><%= f.submit "Create a new list", class: "btn-ghost" %></div>
+              <div class="text-center position-relative">
+                <%= f.submit "Create a new list", class: "btn-ghost" %>
+                <% if flash[:error].present? %>
+                  <div class="alert-danger position-absolute">
+                    <%= flash[:error] %>
+                  </div>
+                <% end %>
+              </div>
             <% end %>
           </div>
         </div>
