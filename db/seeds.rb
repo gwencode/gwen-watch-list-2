@@ -146,7 +146,7 @@ def add_actor_details
     actor_details_serialized = URI.open(url_actor).read
     actor_details = JSON.parse(actor_details_serialized)
     actor.update(biography: actor_details['biography'],
-                picture_url: "https://image.tmdb.org/t/p/w500/#{actor_details['profile_path']}")
+                picture_url: "https://image.tmdb.org/t/p/w500#{actor_details['profile_path']}")
     puts "#{actor.name} (#{actor.id}) updated!"
   end
 
@@ -162,9 +162,9 @@ parse_actors_casts
 add_actor_details
 puts 'First 40 movies created! You can start to work on localhost:3000!'
 
-puts 'Wait for more movies and actors... Now creating more movies'
-parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
-parse_actors_casts
-add_actor_details
+# puts 'Wait for more movies and actors... Now creating more movies'
+# parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
+# parse_actors_casts
+# add_actor_details
 
 puts 'Finished!'
