@@ -29,8 +29,8 @@ class Movie < ApplicationRecord
   def reco_movies
     reco_movies = parsing_reco_movies(self)
     five_reco_movies = []
-    reco_movies.each_with_index do |movie, index|
-      next if index > 4
+    reco_movies.each do |movie|
+      next if five_reco_movies.count == 5
 
       if Movie.find_by(api_id: movie['id']).nil?
         new_movie = Movie.create(
@@ -44,9 +44,10 @@ class Movie < ApplicationRecord
         )
         adding_details(new_movie)
         adding_director(new_movie)
-        five_reco_movies << new_movie
+        five_reco_movies << new_movie if new_movie.valid?
       else
-        five_reco_movies << Movie.find_by(api_id: movie['id'])
+        movie = Movie.find_by(api_id: movie['id'])
+        five_reco_movies << movie if movie.valid?
       end
     end
     five_reco_movies

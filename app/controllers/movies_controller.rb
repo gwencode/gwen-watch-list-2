@@ -20,11 +20,13 @@ class MoviesController < ApplicationController
   end
 
   def show
+    if current_user
+      @bookmark = Bookmark.new
+      @list = List.new(user_id: @user)
+      @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
+      # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
+    end
     @reco_movies = @movie.reco_movies
-    @bookmark = Bookmark.new
-    @list = List.new(user_id: @user)
-    @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
-    # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
   end
 
   private
