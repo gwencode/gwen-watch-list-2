@@ -51,11 +51,8 @@ def parse_movies(start_page, end_page)
 
       new_movie = Movie.create(
         title: movie['title'],
-        overview: movie['overview'],
         poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
-        backdrop_url: movie['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie['backdrop_path']}",
         rating: movie['vote_average'],
-        release_date: movie['release_date'],
         api_id: movie['id'],
         popular: true
       )
@@ -66,18 +63,6 @@ def parse_movies(start_page, end_page)
           MovieGenre.create(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
         end
       end
-
-      url_movie = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}?api_key=#{API_KEY}&language=en-US"
-      movie_details_serialized = URI.open(url_movie).read
-      movie_details = JSON.parse(movie_details_serialized)
-      new_movie.update(run_time: movie_details['runtime'], budget: movie_details['budget'], revenue: movie_details['revenue'])
-
-      url_credits = "https://api.themoviedb.org/3/movie/#{new_movie[:api_id]}/credits?api_key=#{API_KEY}&language=en-US"
-      credits_serialized = URI.open(url_credits).read
-      crew = JSON.parse(credits_serialized)['crew']
-      director = crew.find { |member| member['job'] == 'Director' }
-      director_name = director.nil? ? '' : director['name']
-      new_movie.update(director: director_name)
     end
     puts "#{Movie.count} movies created!"
   end
@@ -125,7 +110,9 @@ def parse_actors_casts
     max_10_casts.each do |cast|
       next if cast['profile_path'].nil?
 
-      actor = Actor.find_or_create_by(name: cast['name'], api_id: cast['id'])
+      actor = Actor.find_or_create_by(name: cast['name'],
+                                      api_id: cast['id'],
+                                      picture_url: "https://image.tmdb.org/t/p/w500#{cast['profile_path']}")
       next if actor.id.nil?
 
       Cast.create(actor: actor,
@@ -139,32 +126,15 @@ def parse_actors_casts
   puts 'Actors and casts created!'
 end
 
-def add_actor_details
-  puts 'Adding details to actors...'
-  Actor.all.each do |actor|
-    url_actor = "https://api.themoviedb.org/3/person/#{actor[:api_id]}?api_key=#{API_KEY}&language=en-US"
-    actor_details_serialized = URI.open(url_actor).read
-    actor_details = JSON.parse(actor_details_serialized)
-    actor.update(biography: actor_details['biography'],
-                picture_url: "https://image.tmdb.org/t/p/w500#{actor_details['profile_path']}")
-    puts "#{actor.name} (#{actor.id}) updated!"
-  end
-
-  puts 'Details added to actors!'
-  puts "#{Actor.count} actors & #{Cast.count} casts created!"
-end
-
 clean_database
 create_genres
 parse_movies(1, 2) # 40 movies
 create_users_lists_bookmarks
 parse_actors_casts
-add_actor_details
 puts 'First 40 movies created! You can start to work on localhost:3000!'
 
 # puts 'Wait for more movies and actors... Now creating more movies'
 # parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
 # parse_actors_casts
-# add_actor_details
 
 puts 'Finished!'

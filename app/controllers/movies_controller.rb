@@ -28,12 +28,9 @@ class MoviesController < ApplicationController
       @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
       # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
     end
-    adding_details(@movie) if @movie.run_time.nil?
+    adding_details(@movie) if @movie.overview.nil?
     adding_director(@movie) if @movie.director.nil?
-    if @movie.actors.empty?
-      parse_actors_casts(@movie)
-      add_actor_details(@movie)
-    end
+    parse_actors_casts(@movie) if @movie.actors.empty?
     @reco_movies = @movie.reco_movies
   end
 
@@ -51,7 +48,10 @@ class MoviesController < ApplicationController
     url_movie = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}?api_key=#{API_KEY}&language=en-US"
     movie_details_serialized = URI.open(url_movie).read
     movie_details = JSON.parse(movie_details_serialized)
-    movie.update(run_time: movie_details['runtime'],
+    movie.update(overview: movie_details['overview'],
+                 backdrop_url: movie_details['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie_details['backdrop_path']}",
+                 release_date: movie_details['release_date'],
+                 run_time: movie_details['runtime'],
                  budget: movie_details['budget'],
                  revenue: movie_details['revenue'],
                  rating: movie_details['vote_average'])
@@ -74,7 +74,9 @@ class MoviesController < ApplicationController
     max_10_casts.each do |cast|
       next if cast['profile_path'].nil?
 
-      actor = Actor.find_or_create_by(name: cast['name'], api_id: cast['id'])
+      actor = Actor.find_or_create_by(name: cast['name'],
+                                      api_id: cast['id'],
+                                      picture_url: "https://image.tmdb.org/t/p/w500#{cast['profile_path']}")
       next if actor.id.nil?
 
       Cast.create(actor: actor,
@@ -82,16 +84,6 @@ class MoviesController < ApplicationController
                   character: cast['character'],
                   order: cast['order'],
                   actor_api_id: cast['id'])
-    end
-  end
-
-  def add_actor_details(movie)
-    movie.actors.each do |actor|
-      url_actor = "https://api.themoviedb.org/3/person/#{actor[:api_id]}?api_key=#{API_KEY}&language=en-US"
-      actor_details_serialized = URI.open(url_actor).read
-      actor_details = JSON.parse(actor_details_serialized)
-      actor.update(biography: actor_details['biography'],
-                  picture_url: "https://image.tmdb.org/t/p/w500#{actor_details['profile_path']}")
     end
   end
 end
