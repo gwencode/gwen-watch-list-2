@@ -162,9 +162,9 @@ parse_actors_casts
 add_actor_details
 puts 'First 40 movies created! You can start to work on localhost:3000!'
 
-# puts 'Wait for more movies and actors... Now creating more movies'
-# parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
-# parse_actors_casts
-# add_actor_details
+puts 'Wait for more movies and actors... Now creating more movies'
+parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
+parse_actors_casts
+add_actor_details
 
 puts 'Finished!'

@@ -1,22 +1,48 @@
-<nav class="navbar navbar-dark bg-black justify-content-between sticky-top">
+<div class="navbar navbar-expand-md navbar-light navbar-lewagon">
+  <div class="container-fluid">
     <%= link_to root_path, class:"navbar-brand ms-3" do %>
-      <%= image_tag "popcorn.png", alt: "Gwen Watch List", width: 30, height: 30 %>
+      <%= image_tag "logo.png", alt: "Gwen Watch List", width: 180 %>
     <% end %>
-    <div class="d-flex align-items-center gap-3 me-3">
-        <%= link_to "Actors", actors_path, class: "nav-link text-white"%>
-      <% if current_user %>
-        <%= link_to "My Movies", my_movies_path, class: "nav-link text-white"%>
-        <%= link_to "My Lists", lists_path, class: "nav-link text-white"%>
-        <%= link_to "My Profile", user_path, class: "nav-link text-white"%>
-        <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link text-white" %>
-      <% else %>
-        <%= link_to "Log in", new_user_session_path, class: "nav-link text-white" %>
-        <% if current_page?(root_path) %>
-          <div class="alert-gray" data-controller="alert" data-alert-target="alert">
-            <span>Log in to add movies to your watch lists</span>
-            <span class="close-alert" data-action="click->alert#close">&times;</span>
-          </div>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto text-end">
+        <li class="nav-item active">
+          <%= link_to "Actors", actors_path, class: "nav-link text-white"%>
+        </li>
+        <% if current_user %>
+          <li class="nav-item active">
+            <%= link_to "My Movies", my_movies_path, class: "nav-link text-white"%>
+          </li>
+          <li class="nav-item">
+            <%= link_to "My Lists", lists_path, class: "nav-link text-white"%>
+          </li>
+          <li class="nav-item">
+            <%= link_to "My Profile", user_path, class: "nav-link text-white"%>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link text-white" %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Log in", new_user_session_path, class: "nav-link text-white" %>
+          </li>
         <% end %>
-      <% end %>
+      </ul>
     </div>
-  </nav>
+  </div>
+          <% if current_page?(root_path) %>
+            <div class="alert-gray" data-controller="alert" data-alert-target="alert">
+              <span class="ps-2">Log in to add movies to your watch lists</span>
+              <span class="close-alert" data-action="click->alert#close">&times;</span>
+            </div>
+          <% end %>
+</div>
