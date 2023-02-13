@@ -146,7 +146,7 @@ def add_actor_details
     actor_details_serialized = URI.open(url_actor).read
     actor_details = JSON.parse(actor_details_serialized)
     actor.update(biography: actor_details['biography'],
-                picture_url: "https://image.tmdb.org/t/p/w500#{actor_details['profile_path']}")
+                picture_url: "https://image.tmdb.org/t/p/w500/#{actor_details['profile_path']}")
     puts "#{actor.name} (#{actor.id}) updated!"
   end
 
