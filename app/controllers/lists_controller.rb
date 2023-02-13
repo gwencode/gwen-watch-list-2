@@ -10,6 +10,10 @@ class ListsController < ApplicationController
   end
 
   def show
+    if @list.user_id != current_user.id
+      flash[:alert] = "You don't have access to this page"
+      redirect_to root_path
+    end
   end
 
   def create
