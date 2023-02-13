@@ -52,7 +52,7 @@ def parse_movies(start_page, end_page)
       new_movie = Movie.create(
         title: movie['title'],
         overview: movie['overview'],
-        poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
+        poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
         backdrop_url: movie['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie['backdrop_path']}",
         rating: movie['vote_average'],
         release_date: movie['release_date'],
@@ -146,7 +146,7 @@ def add_actor_details
     actor_details_serialized = URI.open(url_actor).read
     actor_details = JSON.parse(actor_details_serialized)
     actor.update(biography: actor_details['biography'],
-                picture_url: "https://image.tmdb.org/t/p/w780#{actor_details['profile_path']}")
+                picture_url: "https://image.tmdb.org/t/p/w500#{actor_details['profile_path']}")
     puts "#{actor.name} (#{actor.id}) updated!"
   end
 
@@ -156,15 +156,15 @@ end
 
 clean_database
 create_genres
-parse_movies(1, 3) # 60 movies
+parse_movies(1, 2) # 40 movies
 create_users_lists_bookmarks
 parse_actors_casts
 add_actor_details
-puts 'First 60 movies created! You can start to work on localhost:3000!'
+puts 'First 40 movies created! You can start to work on localhost:3000!'
 
-puts 'Wait for more movies and actors... Now creating more movies'
-parse_movies(4, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
-parse_actors_casts
-add_actor_details
+# puts 'Wait for more movies and actors... Now creating more movies'
+# parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
+# parse_actors_casts
+# add_actor_details
 
 puts 'Finished!'

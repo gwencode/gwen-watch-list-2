@@ -36,7 +36,7 @@ class Movie < ApplicationRecord
         new_movie = Movie.create(
           title: movie['title'],
           overview: movie['overview'],
-          poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
+          poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
           backdrop_url: movie['backdrop_path'].nil? ? '' : "https://image.tmdb.org/t/p/w1280#{movie['backdrop_path']}",
           release_date: movie['release_date'],
           api_id: movie['id'],
