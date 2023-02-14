@@ -15,7 +15,7 @@
       %>
     </div>
      <div class="form-group">
-      <%= select_tag :genre, options_from_collection_for_select(Genre.all, :id, :name), prompt: "Filter by genre", class: "form-control btn-ghost-select" %>
+      <%= select_tag :genre, options_from_collection_for_select(Genre.all, :id, :name, selected: params[:genre]), prompt: "Filter by genre", class: "form-control btn-ghost-select" %>
     </div>
     <%= submit_tag "Search", class: "btn btn-white" %>
     <% end %>

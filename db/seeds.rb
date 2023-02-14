@@ -39,10 +39,11 @@ def create_genres
 end
 
 def parse_movies(start_page, end_page)
-# 36885 pages (20 movies per page)
+# 500 pages (20 movies per page)
   puts 'Creating movies...'
 
   (start_page..end_page).to_a.each do |page_index|
+    puts "Parsing page #{page_index} out of #{end_page}..."
     url_page = "#{URL}&page=#{page_index}"
     movies_serialized = URI.open(url_page).read
     movies = JSON.parse(movies_serialized)['results']
@@ -134,7 +135,7 @@ parse_actors_casts
 puts 'First 40 movies created! You can start to work on localhost:3000!'
 
 puts 'Wait for more movies and actors... Now creating more movies'
-parse_movies(3, 100) # Change 100 to 36885 pages to have all movies (20 movies per page)
+parse_movies(3, 500) # after 501 => OpenURI::HTTPError: 422 Unknown / "page must be less than or equal to 500"
 parse_actors_casts
 
 puts 'Finished!'
