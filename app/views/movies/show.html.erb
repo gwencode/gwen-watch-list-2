@@ -59,11 +59,16 @@
           <p>Revenue: $<%= @movie.formatted_revenue %></p>
         <% end %>
       </div>
+      <% if @movie.video_id == '' || @movie.video_id.nil? %>
+        <p>Sorry, we don't have any trailer for <%= @movie.title %></p>
+      <% else %>
+      <% movie_url = "https://www.youtube.com/embed/#{@movie.video_id}" %>
         <iframe width="280" height="175"
-                src="https://www.youtube.com/embed/O-b2VfmmbyA"
+                src= <%= movie_url %>
                 frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
+      <% end %>
       <% if current_user %>
         <div class="add-to-list">
           <div class="text-center">

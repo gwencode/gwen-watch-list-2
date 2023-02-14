@@ -28,8 +28,9 @@ class MoviesController < ApplicationController
       @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
       # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
     end
-    adding_details(@movie) if @movie.overview.nil?
-    adding_director(@movie) if @movie.director.nil?
+    add_details(@movie) if @movie.overview.nil?
+    add_director(@movie) if @movie.director.nil?
+    add_movie(@movie) if @movie.video_id.nil?
     parse_actors_casts(@movie) if @movie.actors.empty?
     @reco_movies = @movie.reco_movies
   end
@@ -44,7 +45,7 @@ class MoviesController < ApplicationController
     @user = current_user
   end
 
-  def adding_details(movie)
+  def add_details(movie)
     url_movie = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}?api_key=#{API_KEY}&language=en-US"
     movie_details_serialized = URI.open(url_movie).read
     movie_details = JSON.parse(movie_details_serialized)
@@ -57,7 +58,17 @@ class MoviesController < ApplicationController
                  rating: movie_details['vote_average'])
   end
 
-  def adding_director(movie)
+  def add_movie(movie)
+    url_videos = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/videos?api_key=#{API_KEY}&language=en-US"
+    videos_details_serialized = URI.open(url_videos).read
+    videos_details = JSON.parse(videos_details_serialized)
+    videos = videos_details['results']
+    # find the first video that is a trailer
+    video_details = videos.find { |video| video['type'] == 'Trailer' }
+    movie.update(video_id: video_details['key']) if video_details
+  end
+
+  def add_director(movie)
     url_credits = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/credits?api_key=#{API_KEY}&language=en-US"
     credits_serialized = URI.open(url_credits).read
     crew = JSON.parse(credits_serialized)['crew']
