@@ -52,14 +52,36 @@
   }
 }
 
-.add-to-list {
+.trailer {
+  text-align: center;
   display: flex;
-  gap: 16px;
   align-items: center;
-  justify-content: space-evenly;
+  padding: 8px 16px;
+  color: $white;
+  background-color: $dark-gray;
+  margin: 0 auto;
 }
 
-.video {
-  width: 280px;
-  height: 158px;
+.iframe-trailer {
+  width: 60vw;
+  height: 33vw;
+}
+
+.add-to-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+
+@media(max-width: 768px) {
+  .trailer {
+    gap: 16px;
+  }
+
+  .iframe-trailer {
+    width: 90vw;
+    height: 50vw;
+  }
 }

@@ -47,6 +47,7 @@
           <% end %>
         </div>
       </div>
+
       <div class="business">
         <% if @movie.budget == 0 || @movie.budget.nil? %>
           <p>Budget: Unknown</p>
@@ -59,43 +60,57 @@
           <p>Revenue: $<%= @movie.formatted_revenue %></p>
         <% end %>
       </div>
-      <% if @movie.video_id == '' || @movie.video_id.nil? %>
+
+    </div>
+  </div>
+</div>
+
+<div class="row trailer">
+  <div class="col-12 col-md-8">
+    <h2>Trailer</h2>
+    <% if @movie.video_id == '' || @movie.video_id.nil? %>
         <p>Sorry, we don't have any trailer for <%= @movie.title %></p>
       <% else %>
       <% movie_url = "https://www.youtube.com/embed/#{@movie.video_id}" %>
-        <iframe width="280" height="175"
+        <iframe class="iframe-trailer"
                 src= <%= movie_url %>
                 frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
       <% end %>
-      <% if current_user %>
-        <div class="add-to-list">
-          <div class="text-center">
-            <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
-              <%= f.association :list, collection: @lists, label: "Add this movie to a list", input_html: { class: 'input-list' }, required: false %>
-              <div class="text-center"><%= f.submit "Add to this list", class: "btn-ghost" %></div>
-            <% end %>
-          </div>
-          <%#  A simple_form_for to create a new list and new bookmark with the movie %>
-          <div class="text-center">
-            <%= simple_form_for(@list, as: :list, method: :post, url: lists_path) do |f| %>
-              <%= f.input :name, label: "Or create a new list", placeholder: "Name...", input_html: { class: 'input-list' }, required: false %>
-              <%# hidden field movie %>
-              <%= f.input :movie_id, as: :hidden, input_html: { value: @movie.id } %>
-              <div class="text-center position-relative">
-                <%= f.submit "Create a new list", class: "btn-ghost" %>
-                <% if flash[:error].present? %>
-                  <div class="alert-danger position-absolute">
-                    <%= flash[:error] %>
-                  </div>
-                <% end %>
+  </div>
+
+  <div class="col-8 col-sm-6 col-md-4 add-to-list">
+    <% if current_user %>
+
+      <div class="text-center">
+        <h5>Add this movie to a list</h5>
+        <%= simple_form_for(@bookmark, as: :bookmark, method: :post, url: movie_bookmarks_path(movie_id: @movie)) do |f| %>
+          <%= f.association :list, collection: @lists, label: false, input_html: { class: 'input-list' }, required: false %>
+          <div class="text-center"><%= f.submit "Add to this list", class: "btn-ghost" %></div>
+        <% end %>
+      </div>
+
+      <div class="text-center">
+        <h5>Or create a new list</h5>
+        <%= simple_form_for(@list, as: :list, method: :post, url: lists_path) do |f| %>
+          <%= f.input :name, label: false, placeholder: "Name...", input_html: { class: 'input-list' }, required: false %>
+          <%# hidden field movie %>
+          <%= f.input :movie_id, as: :hidden, input_html: { value: @movie.id } %>
+          <div class="text-center position-relative">
+            <%= f.submit "Create a new list", class: "btn-ghost" %>
+            <% if flash[:error].present? %>
+              <div class="alert-danger position-absolute">
+                <%= flash[:error] %>
               </div>
             <% end %>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+
+    <% else %>
+      <%= link_to "Log in to add movies to your lists", new_user_session_path, class: "text-white pb-2" %>
+    <% end %>
   </div>
 </div>
 
