@@ -1,3 +1,5 @@
+require_relative '../services/actor_service'
+
 class ActorsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_actor, only: [:show]
@@ -13,7 +15,7 @@ class ActorsController < ApplicationController
   end
 
   def show
-    add_biography(@actor) if @actor.biography.nil?
+    ActorService.new(@actor).add_biography if @actor.biography.nil?
     popular_movies = @actor.movies.where(popular: true)
     @movies = popular_movies.sort_by { |movie| - movie.rating }
 

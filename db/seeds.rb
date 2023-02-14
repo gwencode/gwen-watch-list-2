@@ -8,6 +8,7 @@
 
 require 'json'
 require 'open-uri'
+require_relative '../app/services/movie_service'
 
 URL = ENV['API_URL']
 API_KEY = ENV['API_KEY']
@@ -104,24 +105,7 @@ end
 def parse_actors_casts
   puts 'Creating actors and max 10 casts per movie...'
   Movie.all.each do |movie|
-    url_credits = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/credits?api_key=#{API_KEY}&language=en-US"
-    credits_serialized = URI.open(url_credits).read
-    credits = JSON.parse(credits_serialized)
-    max_10_casts = credits['cast'].first(10)
-    max_10_casts.each do |cast|
-      next if cast['profile_path'].nil?
-
-      actor = Actor.find_or_create_by(name: cast['name'],
-                                      api_id: cast['id'],
-                                      picture_url: "https://image.tmdb.org/t/p/w500#{cast['profile_path']}")
-      next if actor.id.nil?
-
-      Cast.create(actor: actor,
-                  movie: movie,
-                  character: cast['character'],
-                  order: cast['order'],
-                  actor_api_id: cast['id'])
-    end
+    MovieService.new(movie).parse_actors_casts
     puts "#{Actor.count} actors & #{Cast.count} casts created!"
   end
   puts 'Actors and casts created!'
