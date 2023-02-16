@@ -17,7 +17,7 @@
           <% if @movie.rating == 0 || @movie.rating.nil? %>
             <p>Unknown</p>
           <% else %>
-            <p><%= @movie.rating %> / 10</p>
+            <p><%= @movie.rating.round(1) %> / 10</p>
           <% end %>
         </div>
         <div>
