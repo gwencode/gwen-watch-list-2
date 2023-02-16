@@ -16,8 +16,43 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  overflow: auto;
 
   h2 {
     margin-bottom: 0 !important;
+  }
+}
+
+#actor-bio {
+  max-height: 50vh;
+}
+
+@media(max-width: 768px) {
+  .actor-background {
+    height: fit-content;
+  }
+
+  .actor-details {
+   flex-direction: column;
+   text-align: center;
+   padding: 12px;
+   gap: 12px;
+  }
+
+  .poster {
+    height: 50vh;
+    width: 34vh;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .actor-infos {
+    padding: 0;
+    gap: 16px;
+    max-height: 60vh;
+  }
+
+  h2 {
+    text-align: center;
   }
 }

@@ -1,5 +1,6 @@
 .movie-background {
   background-size: cover;
+  background-position: center;
   height: 80vh;
   width: 100vw;
   padding: 16px;
@@ -87,7 +88,6 @@
 @media(max-width: 992px) {
   h2 {
     font-size: 27px !important;
-    margin-bottom: 0.5rem !important;
   }
 
   h5 {
@@ -122,7 +122,8 @@
   .movie-details {
    flex-direction: column;
    text-align: center;
-   padding: 12px
+   padding: 12px;
+   gap: 12px;
   }
 
   .poster {

@@ -7,7 +7,7 @@
         <% if @actor.biography == "" %>
           <p>Sorry, we don't have a biography for <%= @actor.name %>.</p>
         <% else %>
-          <p><%= @actor.biography %></p>
+          <p id="actor-bio"><%= @actor.biography %></p>
         <% end %>
       </div>
      </div>
