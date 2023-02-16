@@ -19,7 +19,7 @@
 }
 
 .movie-infos {
-  padding: 16px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -32,6 +32,7 @@
 .movie-sub-infos {
   display: flex;
   gap: 32px;
+  justify-content: space-around;
 
   div {
     display: flex;
@@ -74,6 +75,35 @@
   margin: 0 auto;
 }
 
+.sub-title {
+  text-align: center;
+}
+
+#title-actor {
+  border-top: 1px dashed gray;
+  padding-top: 16px !important;
+}
+
+@media(max-width: 992px) {
+  h2 {
+    font-size: 27px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  h5 {
+    font-size: 16px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  p {
+    font-size: 14px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .movie-sub-infos {
+    gap: 16px;
+  }
+}
 
 @media(max-width: 768px) {
   .trailer {
@@ -83,5 +113,34 @@
   .iframe-trailer {
     width: 90vw;
     height: 50vw;
+  }
+
+  .movie-background {
+    height: fit-content;
+  }
+
+  .movie-details {
+   flex-direction: column;
+   text-align: center;
+   padding: 12px
+  }
+
+  .poster {
+    height: 50vh;
+    width: 34vh;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .movie-infos {
+    padding: 0;
+  }
+
+  .trailer {
+    padding: 16px;
+  }
+
+  h2 {
+    text-align: center;
   }
 }

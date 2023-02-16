@@ -115,7 +115,7 @@
 </div>
 
 <div class="small-container-white">
-  <h2>Recommanded Movies</h2>
+  <h2 class="sub-title">Recommanded Movies</h2>
 
   <% if @reco_movies == [] %>
     <p>Sorry, we don't have any recommandation for <%= @movie.title %></p>
@@ -147,7 +147,7 @@
 </div>
 
 <div class="small-container-white">
-  <h2>Actors</h2>
+  <h2 id="title-actor" class="sub-title">Actors</h2>
 
   <% if @movie.actors == [] %>
     <p>Sorry, we don't have any actor for <%= @movie.title %></p>
