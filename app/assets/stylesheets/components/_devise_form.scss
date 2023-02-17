@@ -43,4 +43,17 @@
   .two-inline-input {
     width: 50%;
   }
+
+  @media (max-width: 415px) {
+    flex-direction: column;
+    gap: 8px;
+
+    .two-inline-input {
+      width: 100%;
+    }
+
+    label {
+      margin-bottom: 4px;
+    }
+  }
 }
