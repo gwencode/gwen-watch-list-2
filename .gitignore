@@ -37,6 +37,3 @@
 
 # Ignore .env file
 .env
-
-# Ignore config/master.key
-/config/master.key
