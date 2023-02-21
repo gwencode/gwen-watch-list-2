@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: gwen_watch_list_2_production
-  username: gwen_watch_list_2
-  password: <%= ENV["GWEN_WATCH_LIST_2_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
