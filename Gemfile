@@ -78,3 +78,5 @@ gem 'rspec-rails', group: [ :test ]
 gem 'rails-controller-testing', group: [ :test ]
 
 gem "dockerfile-rails", ">= 1.1", :group => :development
+
+gem "redis", "~> 5.0"
