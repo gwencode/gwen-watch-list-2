@@ -8,58 +8,12 @@ API_KEY = ENV['API_KEY']
 def clean_database
   puts 'Cleaning database...'
   Bookmark.destroy_all
-  MovieGenre.destroy_all
   List.destroy_all
   User.destroy_all
   Cast.destroy_all
   Actor.destroy_all
   Movie.destroy_all
-  Genre.destroy_all
   puts 'Database cleaned!'
-end
-
-def create_genres
-  puts 'Creating genres...'
-
-  url_genres = "https://api.themoviedb.org/3/genre/movie/list?api_key=#{API_KEY}&language=en-US"
-  genres_serialized = URI.open(url_genres).read
-  genres = JSON.parse(genres_serialized)['genres']
-  genres.each do |genre|
-    Genre.create(name: genre['name'], api_id: genre['id'])
-  end
-
-  puts "#{Genre.count} genres created!"
-end
-
-def parse_movies(start_page, end_page)
-# 500 pages (20 movies per page)
-  puts 'Creating movies...'
-
-  (start_page..end_page).to_a.each do |page_index|
-    puts "Parsing page #{page_index} out of #{end_page}..."
-    url_page = "#{URL}&page=#{page_index}"
-    movies_serialized = URI.open(url_page).read
-    movies = JSON.parse(movies_serialized)['results']
-    movies.each do |movie|
-      next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
-
-      new_movie = Movie.create(
-        title: movie['title'],
-        poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
-        rating: movie['vote_average'],
-        api_id: movie['id'],
-        popular: true
-      )
-      next if new_movie.id.nil?
-
-      unless movie['genre_ids'].nil?
-        movie['genre_ids'].each do |genre_id|
-          MovieGenre.create(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
-        end
-      end
-    end
-    puts "#{Movie.count} movies created!"
-  end
 end
 
 def create_users_lists_bookmarks

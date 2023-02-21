@@ -12,7 +12,8 @@ class Movie < ApplicationRecord
   has_many :movie_genres
   has_many :genres, through: :movie_genres
 
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
+  validates :title, uniqueness: { scope: :api_id }
 
   include PgSearch::Model
   pg_search_scope :search_by_title,

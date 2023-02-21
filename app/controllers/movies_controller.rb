@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../services/movie_service'
+require_relative '../services/genre_service'
 
 # Controller for the Movie model
 class MoviesController < ApplicationController
@@ -9,6 +10,8 @@ class MoviesController < ApplicationController
   before_action :set_user, only: %i[show]
 
   def index
+    GenreService.new.set_genres if Genre.all.empty?
+    MovieService.new.parse_movies(1, 3)
     popular_movies = Movie.where(popular: true)
     if params[:query].present?
       popular_movies = popular_movies.where('title ILIKE ?', "%#{params[:query]}%")
@@ -21,6 +24,11 @@ class MoviesController < ApplicationController
     @movies = popular_movies.sort_by { |movie| movie.id }
   end
 
+  # def parse_movies(start_page, end_page)
+  #   MovieService.new.parse_movies(start_page, end_page)
+  #   redirect_to movies_path
+  # end
+
   def show
     if current_user
       @bookmark = Bookmark.new
@@ -28,10 +36,10 @@ class MoviesController < ApplicationController
       @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
       # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
     end
-    MovieService.new(@movie).add_details if @movie.overview.nil?
-    MovieService.new(@movie).add_director if @movie.director.nil?
-    MovieService.new(@movie).add_video if @movie.video_id.nil?
-    MovieService.new(@movie).parse_actors_casts if @movie.actors.empty?
+    MovieService.new.add_details(@movie) if @movie.overview.nil?
+    MovieService.new.add_director(@movie) if @movie.director.nil?
+    MovieService.new.add_video(@movie) if @movie.video_id.nil?
+    MovieService.new.parse_actors_casts(@movie) if @movie.actors.empty?
     @reco_movies = @movie.reco_movies
   end
 
