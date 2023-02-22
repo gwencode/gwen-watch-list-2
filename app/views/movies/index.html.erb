@@ -23,9 +23,9 @@
 </div>
 <div class="small-container-white" data-controller="load-more">
   <h2 id="title-popular-movies">Popular Movies</h2>
-  <div class="cards-movies">
+  <div class="cards-movies" data-load-more-target="movies">
     <% @movies.each do |movie| %>
-      <div class="d-none" data-load-more-target="movie">
+      <div data-load-more-target="movie">
         <%= link_to movie_path(movie), class: "text-decoration-none" do %>
           <div class="card-movie">
             <% if movie.poster_url == ''%>
@@ -47,5 +47,8 @@
   </div>
 </div>
 <script>
-  var movieCount = <%= @movies.count %>;
+  var pagesCount = 500;
+  var popularMoviesCount = <%= Movie.where(popular: true).count %>;
+  var apiURL = "<%= ENV['API_URL'] %>";
+  var pageIndex = <%= @movies.last.page_index %>;
 </script>

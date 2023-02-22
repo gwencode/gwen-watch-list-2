@@ -4,32 +4,33 @@ API_KEY = ENV['API_KEY']
 URL = ENV['API_URL']
 
 class MovieService
-  def parse_movies(start_page, end_page)
+  def parse_movies(page_index)
     # 500 pages (20 movies per page)
-      (start_page..end_page).to_a.each do |page_index|
-        url_page = "#{URL}&page=#{page_index}"
-        movies_serialized = URI.open(url_page).read
-        movies = JSON.parse(movies_serialized)['results']
-        movies.each do |movie|
-          next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
+    url_page = "#{URL}&page=#{page_index}"
+    movies_serialized = URI.open(url_page).read
+    page_index = JSON.parse(movies_serialized)['page'].to_i
+    movies = JSON.parse(movies_serialized)['results']
+    movies.each do |movie|
+      next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
 
-          new_movie = Movie.find_or_create_by(
-            title: movie['title'],
-            poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
-            rating: movie['vote_average'],
-            api_id: movie['id'],
-            popular: true
-          )
-          next if new_movie.id.nil?
+      new_movie = Movie.find_or_create_by(
+        title: movie['title'],
+        poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
+        rating: movie['vote_average'],
+        api_id: movie['id'],
+        popular: true,
+        page_index: page_index
+      )
+      next if new_movie.id.nil?
 
-          unless movie['genre_ids'].nil?
-            movie['genre_ids'].each do |genre_id|
-              MovieGenre.find_or_create_by(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
-            end
-          end
+      unless movie['genre_ids'].nil?
+        movie['genre_ids'].each do |genre_id|
+          MovieGenre.find_or_create_by(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
         end
       end
     end
+    movies.to_json
+  end
 
   def add_details(movie)
     url_movie = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}?api_key=#{API_KEY}&language=en-US"

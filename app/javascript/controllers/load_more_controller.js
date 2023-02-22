@@ -2,36 +2,59 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="load-more"
 export default class extends Controller {
-  static targets = [ "movie", "button" ]
+  static targets = [ "movies", "movie", "button" ]
 
   connect() {
-    this.currentPage = 1
     this.perPage = 20
-    this.loadPage()
+    // console.log(pageIndex)
   }
 
   loadMore(event) {
     event.preventDefault()
-    this.currentPage++
+    pageIndex++
+    // console.log(pageIndex)
     this.loadPage()
   }
 
-  loadPage() {
-    const maxMovies = this.currentPage * this.perPage
+  async loadPage() {
+    this.maxMovies = pageIndex * this.perPage
 
-    if (maxMovies >= movieCount) {
+    if (pageIndex >= this.pagesCount) {
       this.updateButton()
     }
 
-    const movies = this.movieTargets
-    movies.forEach((movie, index) => {
-      if (index < maxMovies) {
-        movie.classList.remove("d-none")
+    const url = `/?page=${pageIndex}`
+    const response = await fetch(url)
+    const html = await response.text()
+    // console.log(html)
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // console.log(doc)
+    // console.log(this.maxMovies)
+    const movies = doc.querySelectorAll('[data-load-more-target="movie"]');
+    // console.log(movies)
+    movies.forEach((node, index) => {
+      if (index >= this.maxMovies - this.perPage) {
+        this.moviesTarget.insertAdjacentElement('beforeend', movies[index]);
       }
-    })
+    });
   }
 
   updateButton() {
     this.buttonTarget.classList.add("d-none")
   }
 }
+
+  // const endpoint = `/movies/parse_movies/${this.currentPage}`
+  // console.log(endpoint)
+  // fetch(endpoint)
+  //   .then(response => response.json())
+  //   .then(movies => {
+  //     console.log(movies)
+  //   })
+
+  // fetch(`${apiURL}&page=${this.currentPage}`)
+  //   .then(response => response.json())
+  //   .then(movies => {
+  //     console.log(movies['results'])
+  //   })

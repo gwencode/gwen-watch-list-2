@@ -11,7 +11,12 @@ class MoviesController < ApplicationController
 
   def index
     GenreService.new.set_genres if Genre.all.empty?
-    MovieService.new.parse_movies(1, 3)
+    MovieService.new.parse_movies(1)
+    if params[:page].present?
+      MovieService.new.parse_movies(params[:page].to_i)
+      # redirect to root path after MovieService.new.parse_movies(params[:page].to_i) finished
+    end
+
     popular_movies = Movie.where(popular: true)
     if params[:query].present?
       popular_movies = popular_movies.where('title ILIKE ?', "%#{params[:query]}%")
@@ -24,10 +29,6 @@ class MoviesController < ApplicationController
     @movies = popular_movies.sort_by { |movie| movie.id }
   end
 
-  # def parse_movies(start_page, end_page)
-  #   MovieService.new.parse_movies(start_page, end_page)
-  #   redirect_to movies_path
-  # end
 
   def show
     if current_user
@@ -53,6 +54,15 @@ class MoviesController < ApplicationController
     @user = current_user
   end
 end
+
+# def parse_movies
+#   movie_service = MovieService.new
+#   p params[:page_index]
+#   movies = movie_service.parse_movies(params[:page_index].to_i)
+#   p movies
+#   p Movie.count
+#   render json: movies
+# end
 
 ### pluck documentation
 
