@@ -10,6 +10,7 @@ class MovieService
     movies_serialized = URI.open(url_page).read
     page_index = JSON.parse(movies_serialized)['page'].to_i
     movies = JSON.parse(movies_serialized)['results']
+    new_movies = []
     movies.each do |movie|
       next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
 
@@ -28,8 +29,9 @@ class MovieService
           MovieGenre.find_or_create_by(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
         end
       end
+      new_movies << new_movie
     end
-    movies.to_json
+    new_movies
   end
 
   def add_details(movie)

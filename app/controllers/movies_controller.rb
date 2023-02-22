@@ -5,19 +5,21 @@ require_relative '../services/genre_service'
 
 # Controller for the Movie model
 class MoviesController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[index show]
+  skip_before_action :authenticate_user!, only: %i[index parse_movies show]
   before_action :set_movie, only: %i[show]
   before_action :set_user, only: %i[show]
 
   def index
     GenreService.new.set_genres if Genre.all.empty?
-    MovieService.new.parse_movies(1)
-    if params[:page].present?
-      MovieService.new.parse_movies(params[:page].to_i)
-      # redirect to root path after MovieService.new.parse_movies(params[:page].to_i) finished
-    end
+    MovieService.new.parse_movies(1) if Movie.all.empty?
+
+    # if params[:page].present?
+    #   MovieService.new.parse_movies(params[:page].to_i)
+    #   # popular_movies = Movie.where(popular: true)
+    # end
 
     popular_movies = Movie.where(popular: true)
+
     if params[:query].present?
       popular_movies = popular_movies.where('title ILIKE ?', "%#{params[:query]}%")
     end
@@ -26,7 +28,13 @@ class MoviesController < ApplicationController
       popular_movies = popular_movies.joins(:genres).where(genres: { id: params[:genre].to_i })
     end
 
-    @movies = popular_movies.sort_by { |movie| movie.id }
+    @movies = popular_movies.sort_by { |movie| movie.page_index}
+  end
+
+  def parse_movies
+    movie_service = MovieService.new
+    new_movies = movie_service.parse_movies(params[:page].to_i)
+    render json: new_movies
   end
 
 
@@ -54,15 +62,6 @@ class MoviesController < ApplicationController
     @user = current_user
   end
 end
-
-# def parse_movies
-#   movie_service = MovieService.new
-#   p params[:page_index]
-#   movies = movie_service.parse_movies(params[:page_index].to_i)
-#   p movies
-#   p Movie.count
-#   render json: movies
-# end
 
 ### pluck documentation
 

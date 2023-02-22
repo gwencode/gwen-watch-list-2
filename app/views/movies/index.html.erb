@@ -48,7 +48,6 @@
 </div>
 <script>
   var pagesCount = 500;
-  var popularMoviesCount = <%= Movie.where(popular: true).count %>;
   var apiURL = "<%= ENV['API_URL'] %>";
-  var pageIndex = <%= @movies.last.page_index %>;
+  var pageIndex = <%= @movies.empty? ? 1 : @movies.last.page_index %>;
 </script>
