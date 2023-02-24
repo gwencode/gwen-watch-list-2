@@ -7,12 +7,16 @@ export default class extends Controller {
   connect() {
     this.perPage = 20
     console.log(pageIndex)
+    console.log(query)
+    console.log(genre)
   }
 
   loadMore(event) {
     event.preventDefault()
     pageIndex++
     console.log(pageIndex)
+    console.log(query)
+    console.log(genre)
     this.loadPage()
   }
 
@@ -23,7 +27,7 @@ export default class extends Controller {
       this.updateButton()
     }
 
-    const url =`/movies/parse_movies/?page=${pageIndex}`
+    const url =`/?page=${pageIndex}&query=${query}&genre=${genre}`
     const response = await fetch(url)
     console.log(response)
     const movies = await response.json()
@@ -33,7 +37,7 @@ export default class extends Controller {
     parseMovies(movies) {
       console.log(movies)
       movies.forEach(movie => {
-        console.log(movie)
+        // console.log(movie)
       })
       const html = movies.map(movie => {
         return `<div data-load-more-target="movie">

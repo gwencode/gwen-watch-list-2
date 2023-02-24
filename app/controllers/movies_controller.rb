@@ -11,14 +11,17 @@ class MoviesController < ApplicationController
 
   def index
     GenreService.new.set_genres if Genre.all.empty?
-    MovieService.new.parse_movies(1) if Movie.all.empty?
+    MovieService.new.parse_movies(1)
+    popular_movies = Movie.where(popular: true, page_index: 1)
 
-    # if params[:page].present?
-    #   MovieService.new.parse_movies(params[:page].to_i)
-    #   # popular_movies = Movie.where(popular: true)
-    # end
-
-    popular_movies = Movie.where(popular: true)
+    if params[:page].present?
+      # popular_movies = Movie.where(popular: true).where("page_index <= ?", params[:page].to_i)
+      movie_service = MovieService.new
+      new_movies = movie_service.parse_movies(params[:page].to_i)
+      new_movies = new_movies.select { |movie| movie.title.downcase.include?(params[:query].downcase) } if params[:query].present?
+      new_movies = new_movies.select { |movie| movie.genres.include?(Genre.find(params[:genre])) } if params[:genre].present?
+      render json: new_movies
+    end
 
     if params[:query].present?
       popular_movies = popular_movies.where('title ILIKE ?', "%#{params[:query]}%")
@@ -30,13 +33,6 @@ class MoviesController < ApplicationController
 
     @movies = popular_movies.sort_by { |movie| movie.page_index}
   end
-
-  def parse_movies
-    movie_service = MovieService.new
-    new_movies = movie_service.parse_movies(params[:page].to_i)
-    render json: new_movies
-  end
-
 
   def show
     if current_user

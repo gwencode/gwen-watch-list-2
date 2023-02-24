@@ -49,5 +49,7 @@
 <script>
   var pagesCount = 500;
   var apiURL = "<%= ENV['API_URL'] %>";
-  var pageIndex = <%= @movies.empty? ? 1 : @movies.last.page_index %>;
+  var pageIndex = 1;
+  var query = "<%= params[:query] %>";
+  var genre = "<%= params[:genre] %>";
 </script>
