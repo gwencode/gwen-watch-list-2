@@ -7,16 +7,16 @@ export default class extends Controller {
   connect() {
     this.perPage = 20
     console.log(`Page index = ${pageIndex}`)
-    // console.log(query)
-    // console.log(genre)
+    console.log(`Query = ${query}`)
+    console.log(`Genre = ${genre}`)
   }
 
   loadMore(event) {
     event.preventDefault()
     pageIndex++
     console.log(`Page index = ${pageIndex}`)
-    // console.log(query)
-    // console.log(genre)
+    console.log(`Query = ${query}`)
+    console.log(`Genre = ${genre}`)
     this.loadPage()
   }
 
