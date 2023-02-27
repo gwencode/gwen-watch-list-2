@@ -32,7 +32,12 @@ export default class extends Controller {
     console.log(response)
     const movies = await response.json()
       this.parseMovies(movies);
+    // Check if genre is not empty and add 4 to pageIndex in this case
+    if (genre != "") {
+      pageIndex += 4;
+      console.log(`Page index = ${pageIndex}`)
     }
+  }
 
     parseMovies(movies) {
       console.log(movies)
