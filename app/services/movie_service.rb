@@ -4,32 +4,33 @@ API_KEY = ENV['API_KEY']
 URL = ENV['API_URL']
 
 class MovieService
-  def parse_movies(page_index)
+  def parse_movies(page_start, page_end = page_start)
     # 500 pages (20 movies per page)
-    url_page = "#{URL}&page=#{page_index}"
-    movies_serialized = URI.open(url_page).read
-    page_index = JSON.parse(movies_serialized)['page'].to_i
-    movies = JSON.parse(movies_serialized)['results']
     new_movies = []
-    movies.each do |movie|
-      next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
+    (page_start..page_end).each do |page_index|
+      url_page = "#{URL}&page=#{page_index}"
+      movies_serialized = URI.open(url_page).read
+      page_index = JSON.parse(movies_serialized)['page'].to_i
+      movies = JSON.parse(movies_serialized)['results']
+      movies.each do |movie|
+        next if movie['poster_path'].nil? && movie['backdrop_path'].nil?
 
-      new_movie = Movie.find_or_create_by(
-        title: movie['title'],
-        poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
-        rating: movie['vote_average'],
-        api_id: movie['id'],
-        popular: true,
-        page_index: page_index
-      )
-      next if new_movie.id.nil?
+        new_movie = Movie.find_or_create_by(title: movie['title'], api_id: movie['id'])
 
-      unless movie['genre_ids'].nil?
-        movie['genre_ids'].each do |genre_id|
-          MovieGenre.find_or_create_by(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
+        new_movie.update(
+          poster_url: movie['poster_path'].nil? ? '' : "https://image.tmdb.org/t/p/w400#{movie['poster_path']}",
+          popular: true,
+          page_index: page_index)
+
+        next if new_movie.id.nil?
+
+        unless movie['genre_ids'].nil?
+          movie['genre_ids'].each do |genre_id|
+            MovieGenre.find_or_create_by(movie: new_movie, genre: Genre.find_by(api_id: genre_id)) unless genre_id.nil?
+          end
         end
+        new_movies << new_movie
       end
-      new_movies << new_movie
     end
     new_movies
   end

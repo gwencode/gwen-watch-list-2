@@ -11,12 +11,20 @@ class MoviesController < ApplicationController
 
   def index
     GenreService.new.set_genres if Genre.all.empty?
-    MovieService.new.parse_movies(1)
-    popular_movies = Movie.where(popular: true, page_index: 1)
+    movie_service = MovieService.new
+    movie_service.parse_movies(1, 50) if Movie.where(popular: true).empty? # Replace 50 by 500 if not too long
+    movie_service.parse_movies(1) # Take new movies from the API
+    popular_movies = Movie.where(popular: true, page_index: 1) # Display first page of movies
+
+    max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index
+    puts "_________________________________________________________"
+    puts "max_page_index = #{max_page_index}"
+    puts "_________________________________________________________"
+    movie_service.parse_movies(max_page_index + 1) # Update the last page of movies at each request
+    puts "_________________________________________________________"
 
     if params[:page].present?
       # popular_movies = Movie.where(popular: true).where("page_index <= ?", params[:page].to_i)
-      movie_service = MovieService.new
       new_movies = movie_service.parse_movies(params[:page].to_i)
       new_movies = new_movies.select { |movie| movie.title.downcase.include?(params[:query].downcase) } if params[:query].present?
       new_movies = new_movies.select { |movie| movie.genres.include?(Genre.find(params[:genre])) } if params[:genre].present?
