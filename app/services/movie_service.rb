@@ -35,6 +35,13 @@ class MovieService
     new_movies
   end
 
+  def add_biography(movie)
+    url_movie = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}?api_key=#{API_KEY}&language=en-US"
+    movie_details_serialized = URI.open(url_movie).read
+    movie_details = JSON.parse(movie_details_serialized)
+    movie.update(overview: movie_details['overview'])
+  end
+
   def add_details(movie)
     url_movie = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}?api_key=#{API_KEY}&language=en-US"
     movie_details_serialized = URI.open(url_movie).read

@@ -1,17 +1,24 @@
 require_relative '../services/actor_service'
+require_relative '../services/movie_service'
 
 class ActorsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_actor, only: [:show]
 
+  def set_actor
+    @actor = Actor.find(params[:id])
+  end
+
   def index
+    # Initialize casts at first use
+    Movie.where(popular: true).each { |movie| MovieService.new.parse_actors_casts(movie) } if Actor.all.empty?
+
     if params[:query].present? && params[:page].present?
-      #TO DO
+      # TO DO
     elsif params[:query].present? && params[:page].blank?
       actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
       @actors = actors.reject { |actor| actor.picture_url.empty? }
     elsif params[:page].present? && params[:query].blank?
-      # TO DO
       @page_index = params[:page].to_i
       @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20 * @page_index)
       lasts_actors = @actors.last(20)
@@ -21,6 +28,12 @@ class ActorsController < ApplicationController
       @page_index = 1
     end
     @actors_count = Actor.all.reject { |actor| actor.picture_url.empty? }.count
+    # Add casts to 50 movies at each page load
+    movies = Movie.where(overview: nil).limit(50)
+    movies.each do |movie|
+      MovieService.new.add_biography(movie)
+      MovieService.new.parse_actors_casts(movie)
+    end
   end
 
   def show

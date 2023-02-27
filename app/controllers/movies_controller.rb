@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
   def index
     GenreService.new.set_genres if Genre.all.empty?
     movie_service = MovieService.new
-    movie_service.parse_movies(1, 400) if Movie.where(popular: true).empty? # Initialize at first use (500 pages)
+    movie_service.parse_movies(1, 300) if Movie.where(popular: true).empty? # Initialize at first use (500 pages)
     popular_movies = Movie.where(popular: true, page_index: 1) # Display first page of movies
 
     if params[:page].present? && params[:query].present? && params[:genre].present?
