@@ -5,13 +5,22 @@ class ActorsController < ApplicationController
   before_action :set_actor, only: [:show]
 
   def index
-    if params[:query].present?
+    if params[:query].present? && params[:page].present?
+      #TO DO
+    elsif params[:query].present? && params[:page].blank?
       actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
       @actors = actors.reject { |actor| actor.picture_url.empty? }
+    elsif params[:page].present? && params[:query].blank?
+      # TO DO
+      @page_index = params[:page].to_i
+      @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20 * @page_index)
+      lasts_actors = @actors.last(20)
+      render json: lasts_actors
     else
-      @actors = Actor.all.reject { |actor| actor.picture_url.empty? }
+      @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20)
+      @page_index = 1
     end
-
+    @actors_count = Actor.all.reject { |actor| actor.picture_url.empty? }.count
   end
 
   def show

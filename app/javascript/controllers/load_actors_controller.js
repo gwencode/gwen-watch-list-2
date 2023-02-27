@@ -2,35 +2,54 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="load-actors"
 export default class extends Controller {
-  static targets = [ "actor", "button" ]
+  static targets = [ "actors", "actor", "button" ]
 
   connect() {
-    this.currentPage = 1
     this.perPage = 20
-    this.loadPage()
+    console.log(`pageIndex = ${pageIndex}`)
+    console.log(`actorCount = ${actorCount}`)
+    console.log(`Query = ${query}`)
   }
 
   loadMore(event) {
     event.preventDefault()
-    this.currentPage++
+    pageIndex++
     this.loadPage()
   }
 
-  loadPage() {
-    const maxActors = this.currentPage * this.perPage
-    console.log(maxActors)
-    console.log(actorCount)
+  async loadPage() {
+    const maxActors = pageIndex * this.perPage
+    console.log(`pageIndex = ${pageIndex}`)
+    console.log(`actorCount = ${actorCount}`)
+    console.log(`maxActors = ${maxActors}`)
+    console.log(`Query = ${query}`)
 
     if (maxActors >= actorCount) {
       this.updateButton()
     }
 
-    const actors = this.actorTargets
-    actors.forEach((actor, index) => {
-      if (index < maxActors) {
-        actor.classList.remove("d-none")
-      }
-    })
+    const url =`/actors?page=${pageIndex}&query=${query}`
+    const response = await fetch(url)
+    console.log(response)
+    const actors = await response.json()
+    this.insertActors(actors);
+  }
+
+  insertActors(actors) {
+    console.log(actors)
+    const html = actors.map(actor => {
+    return `<div data-load-actors-target="actor">
+              <a class="text-decoration-none" href="/actors/${actor.id}">
+                <div class="actor">
+                  <div class="card-movie">
+                    <img src="${actor.picture_url}">
+                  </div>
+                  <h5 class="py-3">${actor.name}</h5>
+                </div>
+              </a>
+            </div>`;
+    }).join('');
+    this.actorsTarget.insertAdjacentHTML('beforeend', html);
   }
 
   updateButton() {

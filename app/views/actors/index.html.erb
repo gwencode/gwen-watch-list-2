@@ -15,23 +15,14 @@
     <% end %>
 </div>
 <div class="small-container-white" data-controller="load-actors">
-  <div class="cards-movies">
-    <% @actors.sort_by { |actor| actor.name }.each do |actor| %>
-      <div class="d-none" data-load-actors-target="actor">
+  <div class="cards-movies" data-load-actors-target="actors">
+    <% @actors.each do |actor| %>
+      <div data-load-actors-target="actor">
         <%= link_to actor_path(actor), class: "text-decoration-none" do %>
           <div class="actor">
             <div class="card-movie">
-
-              <% if actor.picture_url == ''%>
-                <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-
-              <% else %>
-                <%= image_tag actor.picture_url, alt: "" %>
-
-              <% end %>
-
+              <%= image_tag actor.picture_url, alt: "" %>
             </div>
-
             <h5 class="py-3"><%= actor.name %></h5>
           </div>
         <% end %>
@@ -47,5 +38,7 @@
   </div>
 </div>
 <script>
-  var actorCount = <%= @actors.count %>;
+  var actorCount = <%= @actors_count %>;
+  var pageIndex = "<%= @page_index %>";
+  var query = "<%= params[:query] %>";
 </script>

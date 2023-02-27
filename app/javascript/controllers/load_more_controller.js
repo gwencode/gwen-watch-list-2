@@ -23,7 +23,7 @@ export default class extends Controller {
   async loadPage() {
     this.maxMovies = pageIndex * this.perPage
 
-    if (pageIndex >= this.pagesCount) {
+    if (pageIndex >= pagesCount) {
       this.updateButton()
     }
 
@@ -31,7 +31,7 @@ export default class extends Controller {
     const response = await fetch(url)
     console.log(response)
     const movies = await response.json()
-      this.parseMovies(movies);
+    this.parseMovies(movies);
     // Check if genre or query is not empty and if so, add 4 to page index
     if (query != "" || genre != "") {
       pageIndex += 4;
