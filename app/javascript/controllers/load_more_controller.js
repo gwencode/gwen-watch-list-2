@@ -32,8 +32,8 @@ export default class extends Controller {
     console.log(response)
     const movies = await response.json()
       this.parseMovies(movies);
-    // Check if genre is not empty and add 4 to pageIndex in this case
-    if (genre != "") {
+    // Check if genre or query is not empty and if so, add 4 to page index
+    if (query != "" || genre != "") {
       pageIndex += 4;
       console.log(`Page index = ${pageIndex}`)
     }

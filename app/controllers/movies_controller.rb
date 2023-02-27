@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
     if params[:page].present? && params[:query].present? && params[:genre].present?
       # TO DO
     elsif params[:page].present? && params[:query].present? && params[:genre].blank?
-      # Case when user clicks on "Load more movies" button and filters by title
+      # Case when user filters by title and clicks on "Load more movies" button
       @page_index = params[:page].to_i
       new_movies = movie_service.parse_movies(@page_index, @page_index + 4) if @page_index + 4 < 500
       new_movies = new_movies.select { |movie| movie.title.downcase.include?(params[:query].downcase) }
@@ -26,7 +26,7 @@ class MoviesController < ApplicationController
       @movies = popular_movies.sort_by(&:page_index)
       render json: new_movies
     elsif params[:page].present? && params[:genre].present? && params[:query].blank?
-      # Ok : Case when user clicks on "Load more movies" button and filters by genre
+      # Ok : Case when user filters by genre and clicks on "Load more movies" button
       @page_index = params[:page].to_i
       new_movies = movie_service.parse_movies(@page_index, @page_index + 4) if @page_index + 4 < 500
       new_movies = new_movies.select { |movie| movie.genres.include?(Genre.find(params[:genre])) }
