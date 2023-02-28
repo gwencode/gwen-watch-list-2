@@ -2,13 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="load-more"
 export default class extends Controller {
-  static targets = [ "movies", "movie", "button" ]
+  static targets = [ "movies", "movie", "button", "loader" ]
 
   connect() {
     this.perPage = 20
     console.log(`Page index = ${pageIndex}`)
     console.log(`Query = ${query}`)
     console.log(`Genre = ${genre}`)
+    console.log(`moviesCount = ${moviesCount}`)
   }
 
   loadMore(event) {
@@ -17,6 +18,8 @@ export default class extends Controller {
     console.log(`Page index = ${pageIndex}`)
     console.log(`Query = ${query}`)
     console.log(`Genre = ${genre}`)
+    console.log(`moviesCount = ${moviesCount}`)
+    this.showLoader();
     this.loadPage()
   }
 
@@ -37,6 +40,14 @@ export default class extends Controller {
       pageIndex += 4;
       console.log(`Page index = ${pageIndex}`)
     }
+
+    this.hideLoader();
+
+    // Stock in a const the length of the movies array
+    // const moviesLength = movies.length
+    // moviesCount += moviesLength
+    // this.scrollToMovies(moviesCount - moviesLength);
+    // this.scroll();
   }
 
     parseMovies(movies) {
@@ -56,6 +67,36 @@ export default class extends Controller {
     updateButton() {
       this.buttonTarget.classList.add("d-none")
     }
+
+    showLoader() {
+      this.loaderTarget.classList.remove('d-none');
+      this.buttonTarget.setAttribute('disabled', 'disabled');
+    }
+
+    hideLoader() {
+      this.loaderTarget.classList.add('d-none');
+      this.buttonTarget.removeAttribute('disabled');
+    }
+
+    // scrollToMovies(position) {
+    //   // const firstMovie = this.movieTargets[position];
+    //   console.log("Scrolling to movies with getBouding")
+    //   // firstMovie.scrollIntoView({ behavior: "smooth", block: "end"});
+    //   const firstMovie = this.movieTargets[position];
+    //   const { top } = firstMovie.getBoundingClientRect();
+    //   window.scrollTo({
+    //     top: window.scrollY + top,
+    //     behavior: 'smooth'
+    //   });
+
+    // scroll() {
+    //   console.log("Scrolling to movies with window.innerHeight")
+    //   const scrollHeight = window.innerHeight * 0.8;
+    //   window.scrollTo({
+    //     top: scrollHeight,
+    //     behavior: 'smooth'
+    //   });
+    // }
   }
 
   // const url = `/?page=${pageIndex}`

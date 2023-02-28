@@ -76,6 +76,7 @@ class MoviesController < ApplicationController
       max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index
       movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
     end
+    @movies_count = @movies.count
   end
 
   def show
