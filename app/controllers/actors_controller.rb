@@ -6,8 +6,19 @@ class ActorsController < ApplicationController
   before_action :set_actor, only: [:show]
 
   def index
-    # Initialize casts at first use
-    Movie.where(popular: true).first(3000).each { |movie| MovieService.new.parse_actors_casts(movie) } if Actor.count.zero?
+    movie_service = MovieService.new
+    # Initialize casts at first use in production
+    if Movie.where(popular: true).empty? || Movie.where(popular: true, page_index: 20).empty? || Movie.where(popular: true, page_index: 40).empty? || Movie.where(popular: true, page_index: 60).empty? || Movie.where(popular: true, page_index: 80).empty? || Movie.where(popular: true, page_index: 100).empty?
+      Movie.where(popular: true).select {|movie| movie.page_index <= 100 }.each { |movie| movie_service.parse_actors_casts(movie) }
+    elsif Movie.where(popular: true, page_index: 120).empty? || Movie.where(popular: true, page_index: 140).empty? || Movie.where(popular: true, page_index: 160).empty? || Movie.where(popular: true, page_index: 180).empty? || Movie.where(popular: true, page_index: 200).empty?
+      Movie.where(popular: true).select {|movie| (101..200).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
+    elsif Movie.where(popular: true, page_index: 220).empty? || Movie.where(popular: true, page_index: 240).empty? || Movie.where(popular: true, page_index: 260).empty? || Movie.where(popular: true, page_index: 280).empty? || Movie.where(popular: true, page_index: 300).empty?
+      Movie.where(popular: true).select {|movie| (201..300).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
+    elsif Movie.where(popular: true, page_index: 320).empty? || Movie.where(popular: true, page_index: 340).empty? || Movie.where(popular: true, page_index: 360).empty? || Movie.where(popular: true, page_index: 380).empty? || Movie.where(popular: true, page_index: 400).empty?
+      Movie.where(popular: true).select {|movie| (301..400).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
+    elsif Movie.where(popular: true, page_index: 420).empty? || Movie.where(popular: true, page_index: 500).empty? || Movie.where(popular: true, page_index: 440).empty? || Movie.where(popular: true, page_index: 460).empty? || Movie.where(popular: true, page_index: 480).empty?
+      Movie.where(popular: true).select {|movie| (401..500).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
+    end
 
     if params[:query].present? && params[:page].present?
       @page_index = params[:page].to_i

@@ -10,12 +10,12 @@ class MoviesController < ApplicationController
   before_action :set_user, only: %i[show]
 
   def index
-    # Initialize genres at first use
+    # Initialize genres at first use in production
     GenreService.new.set_genres if Genre.all.empty?
 
     movie_service = MovieService.new
 
-    # Initialize movies at first use
+    # Initialize movies at first use in production
     if Movie.where(popular: true).empty? || Movie.where(popular: true, page_index: 20).empty? || Movie.where(popular: true, page_index: 40).empty? || Movie.where(popular: true, page_index: 60).empty? || Movie.where(popular: true, page_index: 80).empty? || Movie.where(popular: true, page_index: 100).empty?
       movie_service.parse_movies(1, 100)
     elsif Movie.where(popular: true, page_index: 120).empty? || Movie.where(popular: true, page_index: 140).empty? || Movie.where(popular: true, page_index: 160).empty? || Movie.where(popular: true, page_index: 180).empty? || Movie.where(popular: true, page_index: 200).empty?
@@ -58,14 +58,14 @@ class MoviesController < ApplicationController
       new_movies = new_movies.select { |movie| movie.genres.include?(genre) }
       popular_movies += new_movies
       @movies = popular_movies.sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index
+      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
       render json: new_movies
     elsif params[:query].present? && params[:genre].present? && params[:page].blank?
       # Case when user filters by title and genre
       title = params[:query]
       genre = params[:genre].to_i
       @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index
+      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
     elsif params[:page].present? && params[:query].blank? && params[:genre].blank?
       # Case when user clicks on "Load more movies" button and no filters are applied
       @page_index = params[:page].to_i
@@ -77,17 +77,17 @@ class MoviesController < ApplicationController
       # Case when user filters by title and no load more movies button is clicked and no genre is selected
       title = params[:query]
       @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index
+      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
     elsif params[:genre].present? && params[:query].blank? && params[:page].blank?
       # Case when user clicks on a genre and no search is applied and no load more movies button is clicked
       genre = params[:genre].to_i
       @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index
+      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
     else
       movie_service.parse_movies(1) # Update page 1 from the API
       # Render the first page of movies
       @movies = popular_movies.sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index
+      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
       # Download a page of movies each time a user goes to the root page
       max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index
       movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
