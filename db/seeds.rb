@@ -1,10 +1,3 @@
-require 'json'
-require 'open-uri'
-require_relative '../app/services/movie_service'
-
-URL = ENV['API_URL']
-API_KEY = ENV['API_KEY']
-
 def clean_database
   puts 'Cleaning database...'
   Bookmark.destroy_all
@@ -16,13 +9,13 @@ def clean_database
   puts 'Database cleaned!'
 end
 
-def create_users
-  puts 'Creating users...'
+def create_user
+  puts 'Creating user...'
   User.create(email: 'gwen@me.com', password: 'password')
-  puts "#{User.count} users created!"
+  puts "#{User.count} user created!"
 end
 
 clean_database
-create_users
+create_user
 
 puts 'Finished!'

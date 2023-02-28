@@ -1,6 +1,5 @@
 require "json"
 require "open-uri"
-API_KEY = ENV['API_KEY']
 
 class ActorService
   def initialize(actor)

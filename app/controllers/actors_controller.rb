@@ -5,13 +5,9 @@ class ActorsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_actor, only: [:show]
 
-  def set_actor
-    @actor = Actor.find(params[:id])
-  end
-
   def index
     # Initialize casts at first use
-    Movie.where(popular: true).each { |movie| MovieService.new.parse_actors_casts(movie) } if Actor.all.empty?
+    Movie.where(popular: true).first(3000).each { |movie| MovieService.new.parse_actors_casts(movie) } if Actor.count.zero?
 
     if params[:query].present? && params[:page].present?
       # TO DO
@@ -28,8 +24,8 @@ class ActorsController < ApplicationController
       @page_index = 1
     end
     @actors_count = Actor.all.reject { |actor| actor.picture_url.empty? }.count
-    # Add casts to 50 movies at each page load
-    movies = Movie.where(overview: nil).limit(50)
+    # Add casts to 5 movies at each page load
+    movies = Movie.where(overview: nil).limit(5)
     movies.each do |movie|
       MovieService.new.add_biography(movie)
       MovieService.new.parse_actors_casts(movie)
@@ -39,7 +35,7 @@ class ActorsController < ApplicationController
   def show
     ActorService.new(@actor).add_biography if @actor.biography.nil?
     popular_movies = @actor.movies.where(popular: true)
-    @movies = popular_movies.sort_by { |movie| - movie.rating }
+    @movies = popular_movies.sort_by(&:title)
 
     # other_movies = @actor.movies.where(popular: false)
     # @other_movies = other_movies.sort_by { |movie| - movie.rating }
