@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="load-actors"
 export default class extends Controller {
-  static targets = [ "actors", "actor", "button" ]
+  static targets = [ "actors", "actor", "button", "loader" ]
 
   connect() {
     this.perPage = 20
@@ -14,6 +14,7 @@ export default class extends Controller {
   loadMore(event) {
     event.preventDefault()
     pageIndex++
+    this.showLoader();
     this.loadPage()
   }
 
@@ -33,6 +34,7 @@ export default class extends Controller {
     console.log(response)
     const actors = await response.json()
     this.insertActors(actors);
+    this.hideLoader();
   }
 
   insertActors(actors) {
@@ -54,5 +56,15 @@ export default class extends Controller {
 
   updateButton() {
     this.buttonTarget.classList.add("d-none")
+  }
+
+  showLoader() {
+    this.loaderTarget.classList.remove("d-none")
+    this.buttonTarget.setAttribute('disabled', 'disabled');
+  }
+
+  hideLoader() {
+    this.loaderTarget.classList.add('d-none');
+    this.buttonTarget.removeAttribute('disabled');
   }
 }
