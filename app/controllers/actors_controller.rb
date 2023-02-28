@@ -10,10 +10,17 @@ class ActorsController < ApplicationController
     Movie.where(popular: true).first(3000).each { |movie| MovieService.new.parse_actors_casts(movie) } if Actor.count.zero?
 
     if params[:query].present? && params[:page].present?
-      # TO DO
+      @page_index = params[:page].to_i
+      actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
+      @actors = actors.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20 * @page_index)
+      actors_count = actors.reject { |actor| actor.picture_url.empty? }.count
+      lasts_actors = actors_count > 20 * @page_index ? @actors.last(20) : @actors.last(actors_count - 20 * (@page_index - 1))
+      render json: lasts_actors
     elsif params[:query].present? && params[:page].blank?
       actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
-      @actors = actors.reject { |actor| actor.picture_url.empty? }
+      @actors = actors.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20)
+      actors_count = actors.reject { |actor| actor.picture_url.empty? }.count
+      @page_index = 1
     elsif params[:page].present? && params[:query].blank?
       @page_index = params[:page].to_i
       @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20 * @page_index)
@@ -23,22 +30,18 @@ class ActorsController < ApplicationController
       @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20)
       @page_index = 1
     end
-    @actors_count = Actor.all.reject { |actor| actor.picture_url.empty? }.count
-    # Add casts to 5 movies at each page load
-    movies = Movie.where(overview: nil).limit(5)
-    movies.each do |movie|
-      MovieService.new.add_biography(movie)
-      MovieService.new.parse_actors_casts(movie)
-    end
+    @actors_count = actors_count || Actor.all.reject { |actor| actor.picture_url.empty? }.count
+
+    # Add casts to a movie at each page load
+    movie = Movie.where(overview: nil).first
+    MovieService.new.add_biography(movie)
+    MovieService.new.parse_actors_casts(movie)
   end
 
   def show
     ActorService.new(@actor).add_biography if @actor.biography.nil?
     popular_movies = @actor.movies.where(popular: true)
     @movies = popular_movies.sort_by(&:title)
-
-    # other_movies = @actor.movies.where(popular: false)
-    # @other_movies = other_movies.sort_by { |movie| - movie.rating }
   end
 
   private
