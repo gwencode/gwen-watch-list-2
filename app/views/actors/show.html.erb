@@ -14,17 +14,21 @@
 </div>
 <div class="small-container-white">
   <h2>Popular Movies</h2>
-  <div class="cards-movies">
-    <% @movies.each do |movie| %>
-      <%= link_to movie_path(movie), class: "text-decoration-none" do %>
-        <div class="card-movie">
-          <% if movie.poster_url == ''%>
-            <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
-          <% else %>
-            <%= image_tag movie.poster_url, alt: "" %>
-          <% end %>
-        </div>
+  <% if @movies.empty? %>
+    <p>Sorry, we don't have any popular movies with <%= @actor.name %>.</p>
+  <% else %>
+    <div class="cards-movies">
+      <% @movies.each do |movie| %>
+        <%= link_to movie_path(movie), class: "text-decoration-none" do %>
+          <div class="card-movie">
+            <% if movie.poster_url == ''%>
+              <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+            <% else %>
+              <%= image_tag movie.poster_url, alt: "" %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
