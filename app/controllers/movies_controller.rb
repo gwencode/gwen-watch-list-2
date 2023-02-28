@@ -10,10 +10,26 @@ class MoviesController < ApplicationController
   before_action :set_user, only: %i[show]
 
   def index
+    # Initialize genres at first use
     GenreService.new.set_genres if Genre.all.empty?
+
     movie_service = MovieService.new
-    movie_service.parse_movies(1, 300) if Movie.where(popular: true).empty? # Initialize at first use (500 pages)
-    popular_movies = Movie.where(popular: true, page_index: 1) # Display first page of movies
+
+    # Initialize movies at first use
+    if Movie.where(popular: true).empty?
+      movie_service.parse_movies(1, 100)
+    elsif Movie.where(popular: true, page_index: 150).empty? && Movie.where(popular: true, page_index: 200).empty?
+      movie_service.parse_movies(101, 200)
+    elsif Movie.where(popular: true, page_index: 250).empty? && Movie.where(popular: true, page_index: 300).empty?
+      movie_service.parse_movies(201, 300)
+    elsif Movie.where(popular: true, page_index: 350).empty? && Movie.where(popular: true, page_index: 400).empty?
+      movie_service.parse_movies(301, 400)
+    elsif Movie.where(popular: true, page_index: 450).empty? && Movie.where(popular: true, page_index: 500).empty?
+      movie_service.parse_movies(401, 500)
+    end
+
+    # Select first page of movies
+    popular_movies = Movie.where(popular: true, page_index: 1)
 
     if params[:page].present? && params[:query].present? && params[:genre].present?
       # Case when user filters by title, genre and clicks on "Load more movies" button
