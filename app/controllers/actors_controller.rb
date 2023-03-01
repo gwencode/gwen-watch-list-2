@@ -9,8 +9,8 @@ class ActorsController < ApplicationController
     movie_service = MovieService.new
 
     # Initialize casts at first use in production
-    ActorService.new.reset_actors
-    # ActorService.new.init_prod if Cast.count <= 30000
+    # ActorService.new.reset_actors
+    ActorService.new.init_prod if Cast.count <= 30000
 
     if params[:query].present? && params[:page].present?
       @page_index = params[:page].to_i
