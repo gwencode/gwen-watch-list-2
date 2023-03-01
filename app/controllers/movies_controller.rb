@@ -13,76 +13,72 @@ class MoviesController < ApplicationController
     # Initialize genres at first use in production
     GenreService.new.set_genres if Genre.all.empty?
 
-    movie_service = MovieService.new
-
     # Initialize movies at first use in production
-    # movie_service.init_prod
-
-    # Select first page of movies
-    popular_movies = Movie.where(popular: true, page_index: 1)
+    # MovieService.new.init_prod
 
     if params[:page].present? && params[:query].present? && params[:genre].present?
       # Case when user filters by title, genre and clicks on "Load more movies" button
       @page_index = params[:page].to_i
       title = params[:query]
-      genre = Genre.find(params[:genre])
-      new_movies = movie_service.parse_movies(@page_index, @page_index + 4) if @page_index + 4 < 500
-      new_movies = new_movies.select { |movie| movie.title.downcase.include?(title.downcase) }
-      new_movies = new_movies.select { |movie| movie.genres.include?(genre) }
-      popular_movies += new_movies
-      @movies = popular_movies.sort_by(&:page_index)
-      render json: new_movies
+      genre = params[:genre].to_i
+      @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).count
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by(&:page_index).first(20 * @page_index)
+      last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
+      render json: last_movies
+
     elsif params[:page].present? && params[:query].present? && params[:genre].blank?
       # Case when user filters by title and clicks on "Load more movies" button
       @page_index = params[:page].to_i
-      new_movies = movie_service.parse_movies(@page_index, @page_index + 4) if @page_index + 4 < 500
-      new_movies = new_movies.select { |movie| movie.title.downcase.include?(params[:query].downcase) }
-      popular_movies += new_movies
-      @movies = popular_movies.sort_by(&:page_index)
-      render json: new_movies
+      title = params[:query]
+      @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").count
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by(&:page_index).first(20 * @page_index)
+      last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
+      render json: last_movies
     elsif params[:page].present? && params[:genre].present? && params[:query].blank?
       # Case when user filters by genre and clicks on "Load more movies" button
       @page_index = params[:page].to_i
       genre = Genre.find(params[:genre])
-      new_movies = movie_service.parse_movies(@page_index, @page_index + 4) if @page_index + 4 < 500
-      new_movies = new_movies.select { |movie| movie.genres.include?(genre) }
-      popular_movies += new_movies
-      @movies = popular_movies.sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
-      render json: new_movies
+      @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
+      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by(&:page_index).first(20 * @page_index)
+      last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
+      render json: last_movies
     elsif params[:query].present? && params[:genre].present? && params[:page].blank?
       # Case when user filters by title and genre
       title = params[:query]
       genre = params[:genre].to_i
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by(&:page_index).first(20)
+      @page_index = 1
+      @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).count
     elsif params[:page].present? && params[:query].blank? && params[:genre].blank?
       # Case when user clicks on "Load more movies" button and no filters are applied
       @page_index = params[:page].to_i
-      new_movies = movie_service.parse_movies(@page_index) if @page_index < 500
-      popular_movies += new_movies
-      @movies = popular_movies.sort_by(&:page_index)
+      new_movies = @page_index < 500 ? Movie.where(popular: true, page_index: @page_index) : []
       render json: new_movies
     elsif params[:query].present? && params[:genre].blank? && params[:page].blank?
       # Case when user filters by title and no load more movies button is clicked and no genre is selected
       title = params[:query]
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by(&:page_index).first(20)
+      @page_index = 1
+      @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").count
     elsif params[:genre].present? && params[:query].blank? && params[:page].blank?
       # Case when user clicks on a genre and no search is applied and no load more movies button is clicked
       genre = params[:genre].to_i
-      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).limit(20).sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
+      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by(&:page_index).first(20)
+      @page_index = 1
+      @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
     else
+      movie_service = MovieService.new
       movie_service.parse_movies(1) # Update page 1 from the API
       # Render the first page of movies
-      @movies = popular_movies.sort_by(&:page_index)
-      @page_index = @movies.max_by(&:page_index).page_index if @movies.any?
-      # Download a page of movies each time a user goes to the root page
+      @movies = Movie.where(popular: true, page_index: 1)
+      @page_index = 1
+      @movies_count = Movie.count
+
+      # Download a page of movies each time a user goes to the root page if not all pages are downloaded
       max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index
+      movie_service.parse_movies(max_page_index) if Movie.where(popular: true, page_index: max_page_index).count <= 10
       movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
     end
-    @movies_count = @movies.count
   end
 
   def show
@@ -92,10 +88,11 @@ class MoviesController < ApplicationController
       @lists = @user.lists.where.not(id: Bookmark.where(movie: @movie).pluck(:list_id))
       # doc for pluck : https://apidock.com/rails/ActiveRecord/Calculations/pluck
     end
-    MovieService.new.add_details(@movie)
-    MovieService.new.add_director(@movie) if @movie.director.nil?
-    MovieService.new.add_video(@movie) if @movie.video_id.nil?
-    MovieService.new.parse_actors_casts(@movie) if @movie.actors.empty?
+    movie_service = MovieService.new
+    movie_service.add_details(@movie)
+    movie_service.add_director(@movie) if @movie.director.nil?
+    movie_service.add_video(@movie) if @movie.video_id.nil?
+    movie_service.parse_actors_casts(@movie) if @movie.actors.empty?
     @reco_movies = @movie.reco_movies
   end
 

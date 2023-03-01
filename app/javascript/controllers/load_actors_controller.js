@@ -7,8 +7,11 @@ export default class extends Controller {
   connect() {
     this.perPage = 20
     console.log(`pageIndex = ${pageIndex}`)
-    console.log(`actorCount = ${actorCount}`)
+    console.log(`actorsCount = ${actorsCount}`)
     console.log(`Query = ${query}`)
+    if (actorsCount < 20) {
+      this.updateButton()
+    }
   }
 
   loadMore(event) {
@@ -21,11 +24,11 @@ export default class extends Controller {
   async loadPage() {
     const maxActors = pageIndex * this.perPage
     console.log(`pageIndex = ${pageIndex}`)
-    console.log(`actorCount = ${actorCount}`)
+    console.log(`actorsCount = ${actorsCount}`)
     console.log(`maxActors = ${maxActors}`)
     console.log(`Query = ${query}`)
 
-    if (maxActors >= actorCount) {
+    if (maxActors >= actorsCount) {
       this.updateButton()
     }
 
