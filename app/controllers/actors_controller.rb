@@ -9,17 +9,7 @@ class ActorsController < ApplicationController
     movie_service = MovieService.new
 
     # Initialize casts at first use in production
-    if Cast.count < 6000
-      Movie.where(popular: true).select {|movie| movie.page_index <= 100 }.each { |movie| movie_service.parse_actors_casts(movie) }
-    elsif Cast.count < 12000
-      Movie.where(popular: true).select {|movie| (101..200).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
-    elsif Cast.count < 18000
-      Movie.where(popular: true).select {|movie| (201..300).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
-    elsif Cast.count < 24000
-      Movie.where(popular: true).select {|movie| (301..400).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
-    elsif Cast.count < 30000
-     Movie.where(popular: true).select {|movie| (401..500).include?(movie.page_index) }.each { |movie| movie_service.parse_actors_casts(movie) }
-    end
+    ActorService.new.init_prod
 
     if params[:query].present? && params[:page].present?
       @page_index = params[:page].to_i
@@ -51,7 +41,7 @@ class ActorsController < ApplicationController
   end
 
   def show
-    ActorService.new(@actor).add_biography if @actor.biography.nil?
+    ActorService.new.add_biography(@actor) if @actor.biography.nil?
     popular_movies = @actor.movies.where(popular: true)
     @movies = popular_movies.sort_by(&:title)
   end
