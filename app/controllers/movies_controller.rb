@@ -72,7 +72,7 @@ class MoviesController < ApplicationController
       # Render the first page of movies
       @movies = Movie.where(popular: true, page_index: 1)
       @page_index = 1
-      @movies_count = Movie.count
+      @movies_count = Movie.where(popular: true).count
 
       # Download a page of movies each time a user goes to the root page if not all pages are downloaded
       max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index

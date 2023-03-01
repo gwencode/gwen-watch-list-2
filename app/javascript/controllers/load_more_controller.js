@@ -26,35 +26,6 @@ export default class extends Controller {
     this.loadPage()
   }
 
-  // async loadPage() {
-  //   this.maxMovies = pageIndex * this.perPage
-  //   console.log(`Max movies = ${this.maxMovies}`)
-
-  //   if (moviesCount <= this.maxMovies) {
-  //     console.log("Updating button when moviesCount <= maxMovies")
-  //     this.updateButton()
-  //   }
-
-  //   const url =`/?query=${query}&genre=${genre}&page=${pageIndex}`
-  //   const response = await fetch(url)
-  //   console.log(response)
-  //   const movies = await response.json()
-  //   this.insertMovies(movies);
-  //   // // Check if genre or query is not empty and if so, add 4 to page index
-  //   // if (query != "" || genre != "") {
-  //   //   pageIndex += 4;
-  //   //   console.log(`Page index = ${pageIndex}`)
-  //   // }
-
-  //   this.hideLoader();
-
-  //   // Stock in a const the length of the movies array
-  //   // const moviesLength = movies.length
-  //   // moviesCount += moviesLength
-  //   // this.scrollToMovies(moviesCount - moviesLength);
-  //   // this.scroll();
-  // }
-
   loadPage() {
     this.maxMovies = pageIndex * this.perPage
     console.log(`Max movies = ${this.maxMovies}`)
