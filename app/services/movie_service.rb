@@ -103,18 +103,18 @@ class MovieService
     end
   end
 
-  # def init_prod
-    # # Initialize movies at first use in production
-    # if Movie.where(popular: true).empty? || Movie.where(popular: true, page_index: 20).empty? || Movie.where(popular: true, page_index: 40).empty? || Movie.where(popular: true, page_index: 60).empty? || Movie.where(popular: true, page_index: 80).empty? || Movie.where(popular: true, page_index: 100).empty?
-    #   self.parse_movies(1, 100)
-    # elsif Movie.where(popular: true, page_index: 120).empty? || Movie.where(popular: true, page_index: 140).empty? || Movie.where(popular: true, page_index: 160).empty? || Movie.where(popular: true, page_index: 180).empty? || Movie.where(popular: true, page_index: 200).empty?
-    #   self.parse_movies(101, 200)
-    # elsif Movie.where(popular: true, page_index: 220).empty? || Movie.where(popular: true, page_index: 240).empty? || Movie.where(popular: true, page_index: 260).empty? || Movie.where(popular: true, page_index: 280).empty? || Movie.where(popular: true, page_index: 300).empty?
-    #   self.parse_movies(201, 300)
-    # elsif Movie.where(popular: true, page_index: 320).empty? || Movie.where(popular: true, page_index: 340).empty? || Movie.where(popular: true, page_index: 360).empty? || Movie.where(popular: true, page_index: 380).empty? || Movie.where(popular: true, page_index: 400).empty?
-    #   self.parse_movies(301, 400)
-    # elsif Movie.where(popular: true, page_index: 420).empty? || Movie.where(popular: true, page_index: 500).empty? || Movie.where(popular: true, page_index: 440).empty? || Movie.where(popular: true, page_index: 460).empty? || Movie.where(popular: true, page_index: 480).empty?
-    #   self.parse_movies(401, 500)
-    # end
-  # end
+  def init_prod
+    # Initialize movies at first use in production
+    if Movie.where(popular: true).empty? || Movie.where(popular: true, page_index: 20).empty? || Movie.where(popular: true, page_index: 40).empty? || Movie.where(popular: true, page_index: 60).empty? || Movie.where(popular: true, page_index: 80).empty? || Movie.where(popular: true, page_index: 100).empty?
+      self.parse_movies(1, 100)
+    elsif Movie.where(popular: true, page_index: 120).empty? || Movie.where(popular: true, page_index: 140).empty? || Movie.where(popular: true, page_index: 160).empty? || Movie.where(popular: true, page_index: 180).empty? || Movie.where(popular: true, page_index: 200).empty?
+      self.parse_movies(101, 200)
+    elsif Movie.where(popular: true, page_index: 220).empty? || Movie.where(popular: true, page_index: 240).empty? || Movie.where(popular: true, page_index: 260).empty? || Movie.where(popular: true, page_index: 280).empty? || Movie.where(popular: true, page_index: 300).empty?
+      self.parse_movies(201, 300)
+    elsif Movie.where(popular: true, page_index: 320).empty? || Movie.where(popular: true, page_index: 340).empty? || Movie.where(popular: true, page_index: 360).empty? || Movie.where(popular: true, page_index: 380).empty? || Movie.where(popular: true, page_index: 400).empty?
+      self.parse_movies(301, 400)
+    elsif Movie.where(popular: true, page_index: 420).empty? || Movie.where(popular: true, page_index: 500).empty? || Movie.where(popular: true, page_index: 440).empty? || Movie.where(popular: true, page_index: 460).empty? || Movie.where(popular: true, page_index: 480).empty?
+      self.parse_movies(401, 500)
+    end
+  end
 end
