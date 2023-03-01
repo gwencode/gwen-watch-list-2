@@ -17,8 +17,6 @@ class ActorService
 
   def init_prod
     movie_service = MovieService.new
-    until Cast.count <= 30000
-      Movie.where(popular: true).each {|movie| movie_service.parse_actors_casts(movie) if movie.casts.empty? && Cast.count <= 30000}
-    end
+    Movie.where(popular: true).each {|movie| movie_service.parse_actors_casts(movie) if movie.casts.empty? && Cast.count <= 30000}
   end
 end
