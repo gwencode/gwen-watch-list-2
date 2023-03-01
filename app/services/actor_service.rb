@@ -10,9 +10,12 @@ class ActorService
     actor.update(biography: actor_details['biography'])
   end
 
-  def init_prod
+  def reset_actors
     Cast.destroy_all
     Actor.destroy_all
+  end
+
+  def init_prod
     movie_service = MovieService.new
     Movie.where(popular: true).each {|movie| movie_service.parse_actors_casts(movie) if movie.casts.empty? }
   end

@@ -77,7 +77,14 @@ class MovieService
 
   def parse_actors_casts(movie)
     url_credits = "https://api.themoviedb.org/3/movie/#{movie[:api_id]}/credits?api_key=#{API_KEY}&language=en-US"
-    credits_serialized = URI.open(url_credits).read
+
+    begin
+      credits_serialized = URI.open(url_credits).read
+    rescue OpenURI::HTTPError => error
+      puts "Erreur : #{error.message}"
+      return
+    end
+
     credits = JSON.parse(credits_serialized)
     max_10_casts = credits['cast'].first(10)
     max_10_casts.each do |cast|
