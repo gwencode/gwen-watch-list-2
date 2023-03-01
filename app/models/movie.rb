@@ -14,6 +14,7 @@ class Movie < ApplicationRecord
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :api_id }
+  validates :api_id, presence: true, uniqueness: true
 
   include PgSearch::Model
   pg_search_scope :search_by_title,
