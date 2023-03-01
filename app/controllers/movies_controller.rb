@@ -14,8 +14,9 @@ class MoviesController < ApplicationController
     GenreService.new.set_genres if Genre.all.empty?
 
     movie_service = MovieService.new
+
     # Initialize movies at first use in production
-    movie_service.init_prod
+    # movie_service.init_prod
 
     # Select first page of movies
     popular_movies = Movie.where(popular: true, page_index: 1)
