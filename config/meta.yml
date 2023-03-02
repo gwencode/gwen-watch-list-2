@@ -1,4 +1,4 @@
 meta_name: "Rails Movie Lists"
 meta_title: "Rails Movie Lists"
 meta_description: "Create your lists of movies among 10.000 popular movies, watch trailers, discover recommended movies, find popular actors..."
-meta_image: "logo.png" # should exist in `app/assets/images/`
+meta_image: "cover.png" # should exist in `app/assets/images/`
