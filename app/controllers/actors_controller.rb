@@ -35,10 +35,9 @@ class ActorsController < ApplicationController
     end
     @actors_count = actors_count || Actor.all.reject { |actor| actor.picture_url.empty? }.count
 
-    # Add casts to a movie at each page load
-    movie = Movie.where(overview: nil).first
-    MovieService.new.add_biography(movie)
-    MovieService.new.parse_actors_casts(movie)
+    # Find a random movie without casts and add casts
+    random_movie = Movie.where("popular = ? AND NOT EXISTS (SELECT 1 FROM casts WHERE movie_id = movies.id)", true).order("RANDOM()").first
+    MovieService.new.parse_actors_casts(random_movie)
   end
 
   def show

@@ -53,6 +53,8 @@ class MoviesController < ApplicationController
       # Case when user clicks on "Load more movies" button and no filters are applied
       @page_index = params[:page].to_i
       new_movies = @page_index < 500 ? Movie.where(popular: true, page_index: @page_index) : []
+      # Update a page of movies each time a user clicks on the "Load more movies" button
+      MovieService.new.parse_movies(@page_index)
       render json: new_movies
     elsif params[:query].present? && params[:genre].blank? && params[:page].blank?
       # Case when user filters by title and no load more movies button is clicked and no genre is selected

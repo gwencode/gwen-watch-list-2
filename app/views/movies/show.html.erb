@@ -170,7 +170,8 @@
             </div>
 
             <h5 class="mt-3"><%= actor.name %></h5>
-            <p class="pb-1"><%= actor.casts.where(movie: @movie).first.character %></p>
+            <% character = actor.casts.where(movie: @movie).first.character %>
+            <p class="pb-1"><%= character.empty? ? "Unknown" : character %></p>
           </div>
         <% end %>
       <% end %>
