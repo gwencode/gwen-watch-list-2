@@ -18,3 +18,6 @@ application.register("load-actors", LoadActorsController)
 
 import LoadMoreController from "./load_more_controller"
 application.register("load-more", LoadMoreController)
+
+import TypedJsController from "./typed_js_controller"
+application.register("typed-js", TypedJsController)
