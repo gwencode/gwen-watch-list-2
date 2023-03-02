@@ -1,3 +1,7 @@
+<% content_for :meta_title, "#{@actor.name} is on #{DEFAULT_META["meta_product_name"]}" %>
+<% content_for :meta_description, @actor.biography if @actor.biography.present? %>
+<% content_for :meta_image, @actor.picture_url if @actor.picture_url.present? %>
+
 <div class="actor-background">
      <div class="actor-details">
       <img src="<%= @actor.picture_url %>" alt="" class="poster">
