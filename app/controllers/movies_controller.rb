@@ -72,7 +72,7 @@ class MoviesController < ApplicationController
       movie_service = MovieService.new
 
       # # Update page 1 from the API
-      # movie_service.parse_movies(1)
+      movie_service.parse_movies(1)
 
       # Render the first page of movies
       @movies = Movie.where(popular: true, page_index: 1)
