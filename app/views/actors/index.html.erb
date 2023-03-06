@@ -1,41 +1,34 @@
 <div class="small-container-dark-gray p-3 pb-0">
     <h2 class="text-center text-white m-0">Popular Actors</h2>
 </div>
-<div class="search-container">
-    <%= form_with url: actors_path, method: :get, class: "search-form" do %>
-    <div class="search-title">
-      <i class="fa-solid fa-magnifying-glass search-icon"></i>
-      <%= text_field_tag :query,
-        params[:query],
-        class: "search-field",
-        placeholder: "Name..."
-      %>
-    </div>
-    <%= submit_tag "Search", class: "btn btn-white" %>
-    <% end %>
-</div>
-<div class="small-container-white" data-controller="load-actors">
-  <div class="cards-movies" data-load-actors-target="actors">
-    <% @actors.each do |actor| %>
-      <div data-load-actors-target="actor">
-        <%= link_to actor_path(actor), class: "text-decoration-none" do %>
-          <div class="actor">
-            <div class="card-movie">
-              <%= image_tag actor.picture_url, alt: "" %>
-            </div>
-            <h5 class="py-3"><%= actor.name %></h5>
-          </div>
-        <% end %>
+<div data-controller="refresh-list">
+  <div class="search-container">
+      <%= form_with url: actors_path, method: :get, class: "search-form", data: { refresh_list_target: 'form' } do |f| %>
+      <div class="search-title">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <%= f.text_field :query,
+                      class: "search-field",
+                      placeholder: 'Name...',
+                      value: params[:query],
+                      data: {
+                        refresh_list_target: 'searchInput',
+                        action: "keyup->refresh-list#update"
+                      } %>
       </div>
-    <% end %>
+      <%= submit_tag "Search", class: "btn btn-white" %>
+      <% end %>
   </div>
-  <div class="text-center mt-3 div-loader">
-    <div data-load-actors-target="loader" class="d-none loader"></div>
-    <button class="button-black-large" role="button"
-            data-action="click->load-actors#loadMore"
-            data-load-actors-target="button">
-      Load more
-    </button>
+
+  <div class="small-container-white" data-controller="load-actors">
+    <%= render "actors/list", actors: @actors %>
+    <div class="text-center mt-3 div-loader">
+      <div data-load-actors-target="loader" class="d-none loader"></div>
+      <button class="button-black-large" role="button"
+              data-action="click->load-actors#loadMore"
+              data-load-actors-target="button">
+        Load more
+      </button>
+    </div>
   </div>
 </div>
 <script>

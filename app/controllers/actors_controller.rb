@@ -32,10 +32,15 @@ class ActorsController < ApplicationController
       @page_index = 1
 
       # Find a random movie without casts and add casts
-      random_movie = Movie.where("popular = ? AND NOT EXISTS (SELECT 1 FROM casts WHERE movie_id = movies.id)", true).order("RANDOM()").first
-      MovieService.new.parse_actors_casts(random_movie)
+      # random_movie = Movie.where("popular = ? AND NOT EXISTS (SELECT 1 FROM casts WHERE movie_id = movies.id)", true).order("RANDOM()").first
+      # MovieService.new.parse_actors_casts(random_movie)
     end
     @actors_count = actors_count || Actor.all.reject { |actor| actor.picture_url.empty? }.count
+
+    respond_to do |format|
+      format.html # Follow regular flow of Rails
+      format.json # Render the index.json.jbuilder template
+    end
   end
 
   def show

@@ -70,16 +70,19 @@ class MoviesController < ApplicationController
       @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
     else
       movie_service = MovieService.new
-      movie_service.parse_movies(1) # Update page 1 from the API
+
+      # # Update page 1 from the API
+      # movie_service.parse_movies(1)
+
       # Render the first page of movies
       @movies = Movie.where(popular: true, page_index: 1)
       @page_index = 1
       @movies_count = Movie.where(popular: true).count
 
-      # Download a page of movies each time a user goes to the root page if not all pages are downloaded
-      max_page_index = Movie.where(popular: true).select { |movie| movie.page_index.present? }.max_by(&:page_index).page_index
-      movie_service.parse_movies(max_page_index) if Movie.where(popular: true, page_index: max_page_index).count <= 10
-      movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
+      # # Download a page of movies each time a user goes to the root page if not all pages are downloaded
+      # max_page_index = Movie.where(popular: true).select { |movie| movie.page_index.present? }.max_by(&:page_index).page_index
+      # movie_service.parse_movies(max_page_index) if Movie.where(popular: true, page_index: max_page_index).count <= 10
+      # movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
     end
   end
 
