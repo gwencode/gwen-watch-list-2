@@ -6,9 +6,9 @@ export default class extends Controller {
 
   connect() {
     this.perPage = 20
-    // console.log(`pageIndex = ${pageIndex}`)
-    // console.log(`actorsCount = ${actorsCount}`)
-    // console.log(`Query = ${query}`)
+    console.log(`pageIndex = ${pageIndex}`)
+    console.log(`actorsCount = ${actorsCount}`)
+    console.log(`Query = ${query}`)
     if (actorsCount < 20) {
       this.updateButton()
     }
@@ -23,10 +23,10 @@ export default class extends Controller {
 
   async loadPage() {
     const maxActors = pageIndex * this.perPage
-    // console.log(`pageIndex = ${pageIndex}`)
-    // console.log(`actorsCount = ${actorsCount}`)
-    // console.log(`maxActors = ${maxActors}`)
-    // console.log(`Query = ${query}`)
+    console.log(`pageIndex = ${pageIndex}`)
+    console.log(`actorsCount = ${actorsCount}`)
+    console.log(`maxActors = ${maxActors}`)
+    console.log(`Query = ${query}`)
 
     if (maxActors >= actorsCount) {
       this.updateButton()
@@ -34,14 +34,14 @@ export default class extends Controller {
 
     const url =`/actors?page=${pageIndex}&query=${query}`
     const response = await fetch(url)
-    // console.log(response)
+    console.log(response)
     const actors = await response.json()
     this.insertActors(actors);
     this.hideLoader();
   }
 
   insertActors(actors) {
-    // console.log(actors)
+    console.log(actors)
     const html = actors.map(actor => {
     return `<div data-load-actors-target="actor">
               <a class="text-decoration-none" href="/actors/${actor.id}">

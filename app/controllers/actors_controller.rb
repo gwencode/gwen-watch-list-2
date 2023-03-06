@@ -37,10 +37,10 @@ class ActorsController < ApplicationController
     end
     @actors_count = actors_count || Actor.all.reject { |actor| actor.picture_url.empty? }.count
 
-    respond_to do |format|
-      format.html # Follow regular flow of Rails
-      format.json # Render the index.json.jbuilder template
-    end
+    # respond_to do |format|
+    #   format.html # Follow regular flow of Rails
+    #   format.json # Render the index.json.jbuilder template
+    # end
   end
 
   def show
