@@ -77,7 +77,7 @@ class MoviesController < ApplicationController
       @movies_count = Movie.where(popular: true).count
 
       # Download a page of movies each time a user goes to the root page if not all pages are downloaded
-      max_page_index = Movie.where(popular: true).max_by(&:page_index).page_index
+      max_page_index = Movie.where(popular: true).select { |movie| movie.page_index.present? }.max_by(&:page_index).page_index
       movie_service.parse_movies(max_page_index) if Movie.where(popular: true, page_index: max_page_index).count <= 10
       movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
     end

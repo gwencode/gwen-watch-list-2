@@ -6,8 +6,6 @@ class ActorsController < ApplicationController
   before_action :set_actor, only: [:show]
 
   def index
-    movie_service = MovieService.new
-
     # Initialize casts at first use in production
     # ActorService.new.reset_actors
     # ActorService.new.init_prod if Cast.count <= 30000
