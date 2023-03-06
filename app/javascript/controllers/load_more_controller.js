@@ -6,10 +6,10 @@ export default class extends Controller {
 
   connect() {
     this.perPage = 20
-    console.log(`Page index = ${pageIndex}`)
-    console.log(`Query = ${query}`)
-    console.log(`Genre = ${genre}`)
-    console.log(`moviesCount = ${moviesCount}`)
+    // console.log(`Page index = ${pageIndex}`)
+    // console.log(`Query = ${query}`)
+    // console.log(`Genre = ${genre}`)
+    // console.log(`moviesCount = ${moviesCount}`)
     if (moviesCount <= 20) {
       this.updateButton()
     }
@@ -18,32 +18,32 @@ export default class extends Controller {
   loadMore(event) {
     event.preventDefault()
     pageIndex++
-    console.log(`Page index = ${pageIndex}`)
-    console.log(`Query = ${query}`)
-    console.log(`Genre = ${genre}`)
-    console.log(`moviesCount = ${moviesCount}`)
+    // console.log(`Page index = ${pageIndex}`)
+    // console.log(`Query = ${query}`)
+    // console.log(`Genre = ${genre}`)
+    // console.log(`moviesCount = ${moviesCount}`)
     this.showLoader();
     this.loadPage()
   }
 
   loadPage() {
     this.maxMovies = pageIndex * this.perPage
-    console.log(`Max movies = ${this.maxMovies}`)
+    // console.log(`Max movies = ${this.maxMovies}`)
 
     if (moviesCount <= this.maxMovies) {
-      console.log("Hide button when no more movies in filters")
+      // console.log("Hide button when no more movies in filters")
       this.updateButton()
     }
 
     if (pageIndex == 500) {
-      console.log("Hide button when max pages of the API is reached")
+      // console.log("Hide button when max pages of the API is reached")
       this.updateButton()
     }
 
     const url =`/?query=${query}&genre=${genre}&page=${pageIndex}`
     fetch(url)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       return response.json();
     })
     .then((movies) => {
@@ -54,7 +54,7 @@ export default class extends Controller {
   }
 
     insertMovies(movies) {
-      console.log(movies)
+      // console.log(movies)
       const html = movies.map(movie => {
         return `<div data-load-more-target="movie">
                   <a class="text-decoration-none" href="/movies/${movie.id}">
