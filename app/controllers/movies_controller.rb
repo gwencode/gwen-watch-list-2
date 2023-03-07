@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
       title = params[:query]
       genre = params[:genre].to_i
       @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).count
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by(&:page_index).first(20 * @page_index)
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by { |m| m.page_index.present? ? m.page_index : m.id }.first(20 * @page_index)
       last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
       render json: last_movies
 
@@ -28,7 +28,7 @@ class MoviesController < ApplicationController
       @page_index = params[:page].to_i
       title = params[:query]
       @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").count
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by(&:page_index).first(20 * @page_index)
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by{ |m| m.page_index.present? ? m.page_index : m.id }.first(20 * @page_index)
       last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
       render json: last_movies
     elsif params[:page].present? && params[:genre].present? && params[:query].blank?
@@ -36,14 +36,14 @@ class MoviesController < ApplicationController
       @page_index = params[:page].to_i
       genre = Genre.find(params[:genre])
       @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
-      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by(&:page_index).first(20 * @page_index)
+      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by{ |m| m.page_index.present? ? m.page_index : m.id }.first(20 * @page_index)
       last_movies = @movies_count > 20 * @page_index ? @movies.last(20) : @movies.last(@movies_count - 20 * (@page_index - 1))
       render json: last_movies
     elsif params[:query].present? && params[:genre].present? && params[:page].blank?
       # Case when user filters by title and genre
       title = params[:query]
       genre = params[:genre].to_i
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by(&:page_index).first(20)
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).sort_by { |m| m.page_index.present? ? m.page_index : m.id }.first(20)
       @page_index = 1
       @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").joins(:genres).where(genres: genre).count
     elsif params[:page].present? && params[:query].blank? && params[:genre].blank?
@@ -54,13 +54,13 @@ class MoviesController < ApplicationController
     elsif params[:query].present? && params[:genre].blank? && params[:page].blank?
       # Case when user filters by title and no load more movies button is clicked and no genre is selected
       title = params[:query]
-      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by(&:page_index).first(20)
+      @movies = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").sort_by { |m| m.page_index.present? ? m.page_index : m.id }.first(20)
       @page_index = 1
       @movies_count = Movie.where(popular: true).where('title ILIKE ?', "%#{title}%").count
     elsif params[:genre].present? && params[:query].blank? && params[:page].blank?
       # Case when user clicks on a genre and no search is applied and no load more movies button is clicked
       genre = params[:genre].to_i
-      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by(&:page_index).first(20)
+      @movies = Movie.where(popular: true).joins(:genres).where(genres: genre).sort_by { |m| m.page_index.present? ? m.page_index : m.id }.first(20)
       @page_index = 1
       @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
     else
