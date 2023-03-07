@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-# Jour 1
+# Lundi, mercredi, vendredi
 every '0 1 * * 1,3,5' do
   runner "MovieService.parse_movies(1, 50)"
 end
@@ -40,7 +40,7 @@ every '0 5 * * 1,3,5' do
   runner "MovieService.parse_movies(201, 250)"
 end
 
-# Jour 2
+# Mardi, jeudi, samedi
 every '0 1 * * 2,4,6' do
   runner "MovieService.parse_movies(251, 300)"
 end
@@ -62,6 +62,6 @@ every '0 5 * * 2,4,6' do
 end
 
 # Tous les jours
-every 1.day, at: ['0:30 am', '1:30 am', '2:30 am', '3:30 am', '4:30 am', '5:30 am'] do
+every 1.minute do
   runner "MovieService.parse_actors_random_movie"
 end
