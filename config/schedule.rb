@@ -62,6 +62,6 @@ every '0 5 * * 2,4,6' do
 end
 
 # Tous les jours
-every 1.minute do
+every 1.day, at: ['0:30 am', '1:30 am', '2:30 am', '3:30 am', '4:30 am', '5:30 am'] do
   runner "MovieService.parse_actors_random_movie"
 end
