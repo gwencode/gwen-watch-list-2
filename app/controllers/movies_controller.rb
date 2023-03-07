@@ -13,9 +13,6 @@ class MoviesController < ApplicationController
     # Initialize genres at first use in production
     GenreService.new.set_genres if Genre.all.empty?
 
-    # Initialize movies at first use in production
-    # MovieService.new.init_prod
-
     if params[:page].present? && params[:query].present? && params[:genre].present?
       # Case when user filters by title, genre and clicks on "Load more movies" button
       @page_index = params[:page].to_i
@@ -53,8 +50,6 @@ class MoviesController < ApplicationController
       # Case when user clicks on "Load more movies" button and no filters are applied
       @page_index = params[:page].to_i
       new_movies = @page_index < 500 ? Movie.where(popular: true, page_index: @page_index) : []
-      # Update a page of movies each time a user clicks on the "Load more movies" button
-      MovieService.new.parse_movies(@page_index)
       render json: new_movies
     elsif params[:query].present? && params[:genre].blank? && params[:page].blank?
       # Case when user filters by title and no load more movies button is clicked and no genre is selected
@@ -69,20 +64,10 @@ class MoviesController < ApplicationController
       @page_index = 1
       @movies_count = Movie.where(popular: true).joins(:genres).where(genres: genre).count
     else
-      movie_service = MovieService.new
-
-      # # Update page 1 from the API
-      # movie_service.parse_movies(1)
-
-      # Render the first page of movies
+      # Render the first page of movies for root page
       @movies = Movie.where(popular: true, page_index: 1)
       @page_index = 1
       @movies_count = Movie.where(popular: true).count
-
-      # # Download a page of movies each time a user goes to the root page if not all pages are downloaded
-      # max_page_index = Movie.where(popular: true).select { |movie| movie.page_index.present? }.max_by(&:page_index).page_index
-      # movie_service.parse_movies(max_page_index) if Movie.where(popular: true, page_index: max_page_index).count <= 10
-      # movie_service.parse_movies(max_page_index + 1) if max_page_index < 500
     end
   end
 

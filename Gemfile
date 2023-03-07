@@ -54,6 +54,7 @@ gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
 gem "pg_search"
 gem "devise"
+gem 'whenever', require: false
 
 # Environment-specific gems
 gem 'dotenv-rails', groups: [:development, :test]

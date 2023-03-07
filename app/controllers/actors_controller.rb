@@ -6,10 +6,6 @@ class ActorsController < ApplicationController
   before_action :set_actor, only: [:show]
 
   def index
-    # Initialize casts at first use in production
-    # ActorService.new.reset_actors
-    # ActorService.new.init_prod if Cast.count <= 30000
-
     if params[:query].present? && params[:page].present?
       @page_index = params[:page].to_i
       actors = Actor.where('name ILIKE ?', "%#{params[:query]}%")
@@ -30,10 +26,6 @@ class ActorsController < ApplicationController
     else
       @actors = Actor.all.reject { |actor| actor.picture_url.empty? }.sort_by(&:name).first(20)
       @page_index = 1
-
-      # Find a random movie without casts and add casts
-      # random_movie = Movie.where("popular = ? AND NOT EXISTS (SELECT 1 FROM casts WHERE movie_id = movies.id)", true).order("RANDOM()").first
-      # MovieService.new.parse_actors_casts(random_movie)
     end
     @actors_count = actors_count || Actor.all.reject { |actor| actor.picture_url.empty? }.count
 

@@ -103,6 +103,12 @@ class MovieService
     end
   end
 
+  # Find a random movie without casts and add casts
+  def parse_actors_random_movie
+    random_movie = Movie.where("popular = ? AND NOT EXISTS (SELECT 1 FROM casts WHERE movie_id = movies.id)", true).order("RANDOM()").first
+    parse_actors_casts(random_movie) if random_movie
+  end
+
   def init_prod
     # Initialize movies at first use in production
     if Movie.where(popular: true).empty? || Movie.where(popular: true, page_index: 20).empty? || Movie.where(popular: true, page_index: 40).empty? || Movie.where(popular: true, page_index: 60).empty? || Movie.where(popular: true, page_index: 80).empty? || Movie.where(popular: true, page_index: 100).empty?
