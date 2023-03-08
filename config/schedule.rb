@@ -19,49 +19,49 @@
 
 # Learn more: http://github.com/javan/whenever
 
-# Lundi, mercredi, vendredi
-every '0 1 * * 1,3,5' do
-  runner "MovieService.parse_movies(1, 50)"
-end
+# # Lundi, mercredi, vendredi
+# every '0 1 * * 1,3,5' do
+#   runner "MovieService.parse_movies(1, 50)"
+# end
 
-every '0 2 * * 1,3,5' do
-  runner "MovieService.parse_movies(51, 100)"
-end
+# every '0 2 * * 1,3,5' do
+#   runner "MovieService.parse_movies(51, 100)"
+# end
 
-every '0 3 * * 1,3,5'do
-  runner "MovieService.parse_movies(101, 150)"
-end
+# every '0 3 * * 1,3,5'do
+#   runner "MovieService.parse_movies(101, 150)"
+# end
 
-every '0 4 * * 1,3,5' do
-  runner "MovieService.parse_movies(151, 200)"
-end
+# every '0 4 * * 1,3,5' do
+#   runner "MovieService.parse_movies(151, 200)"
+# end
 
-every '0 5 * * 1,3,5' do
-  runner "MovieService.parse_movies(201, 250)"
-end
+# every '0 5 * * 1,3,5' do
+#   runner "MovieService.parse_movies(201, 250)"
+# end
 
-# Mardi, jeudi, samedi
-every '0 1 * * 2,4,6' do
-  runner "MovieService.parse_movies(251, 300)"
-end
+# # Mardi, jeudi, samedi
+# every '0 1 * * 2,4,6' do
+#   runner "MovieService.parse_movies(251, 300)"
+# end
 
-every '0 2 * * 2,4,6' do
-  runner "MovieService.parse_movies(301, 350)"
-end
+# every '0 2 * * 2,4,6' do
+#   runner "MovieService.parse_movies(301, 350)"
+# end
 
-every '0 3 * * 2,4,6' do
-  runner "MovieService.parse_movies(351, 400)"
-end
+# every '0 3 * * 2,4,6' do
+#   runner "MovieService.parse_movies(351, 400)"
+# end
 
-every '0 4 * * 2,4,6' do
-  runner "MovieService.parse_movies(401, 450)"
-end
+# every '0 4 * * 2,4,6' do
+#   runner "MovieService.parse_movies(401, 450)"
+# end
 
-every '0 5 * * 2,4,6' do
-  runner "MovieService.parse_movies(451, 500)"
-end
+# every '0 5 * * 2,4,6' do
+#   runner "MovieService.parse_movies(451, 500)"
+# end
 
-# Tous les jours
-every 1.day, at: ['0:30 am', '1:30 am', '2:30 am', '3:30 am', '4:30 am', '5:30 am'] do
-  runner "MovieService.parse_actors_random_movie"
-end
+# # Tous les jours
+# every 1.day, at: ['0:30 am', '1:30 am', '2:30 am', '3:30 am', '4:30 am', '5:30 am'] do
+#   runner "MovieService.parse_actors_random_movie"
+# end
