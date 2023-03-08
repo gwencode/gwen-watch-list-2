@@ -3,7 +3,7 @@ Rails Movie Lists
 
 ## Description 
 
-Rails Movie Lists is a Web-App that allow you to create your lists of movies among 10.000 popular movies, watch trailers, discover recommended movies, find popular actors...
+Rails Movie Lists is a Web-App to create your lists of movies among 10.000 popular movies, watch trailers, discover recommended movies, find popular actors...
 
 The app is using The Movie Database API.
 
