@@ -164,10 +164,10 @@
             <div class="card-movie">
 
               <% if actor.picture_url == ''%>
-                <%= image_tag "oscar.jpg", style: "margin: 14% 0", alt: "" %>
+                <%= image_tag "oscar.jpg", class: "img-actor", style: "margin: 14% 0", alt: "" %>
 
               <% else %>
-                <%= image_tag actor.picture_url, alt: "" %>
+                <%= image_tag actor.picture_url, class: "img-actor", alt: "" %>
 
               <% end %>
 
