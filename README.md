@@ -1,24 +1,21 @@
-# README
+# Name
+Rails Movie Lists 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Description 
 
-Things you may want to cover:
+Rails Movie Lists is a Web-App to create your lists of movies among 10.000 popular movies, watch trailers, discover recommended movies, find popular actors...
 
-* Ruby version
+The app is using The Movie Database API.
 
-* System dependencies
+## Technologies used 
 
-* Configuration
+Ruby on Rails, PostgreSQL, HTML, CSS, Bootstrap, JavaScript, Webpack, Render.com 
 
-* Database creation
+## Context 
 
-* Database initialization
+This Web-App was the first project made on my own just after the end of the 9-weeks coding bootcamp of [Le Wagon](https://www.lewagon.com). It was developped in around 1 month.
 
-* How to run the test suite
+Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
 
-* ...
