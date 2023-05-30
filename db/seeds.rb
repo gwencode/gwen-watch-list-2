@@ -64,12 +64,12 @@ def create_users_lists_bookmarks
   puts "#{superhero.movies.count} movies added to superhero list of John!"
 end
 
-# clean_database
+clean_database
 
-# puts 'Starting to seed...'
+puts 'Starting to seed...'
 
-# create_genres
-# create_movies
+create_genres
+create_movies
 create_actors_casts
 create_users_lists_bookmarks
 
