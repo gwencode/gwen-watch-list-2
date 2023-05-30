@@ -1,5 +1,6 @@
 require "json"
 require "open-uri"
+API_KEY = ENV['API_KEY']
 
 class GenreService
   def set_genres

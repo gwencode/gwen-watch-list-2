@@ -9,6 +9,7 @@ class MovieService
     # 500 pages (20 movies per page)
     new_movies = []
     (page_start..page_end).each do |page_index|
+      puts "Parsing movies'page #{page_index}..."
       url_page = "#{URL}&page=#{page_index}"
       movies_serialized = URI.open(url_page).read
       page_index = JSON.parse(movies_serialized)['page'].to_i

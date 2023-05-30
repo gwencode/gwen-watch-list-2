@@ -23,17 +23,19 @@ end
 
 def create_movies
   puts 'Creating popular movies...'
-  MovieService.new.parse_movies(1, 3)
+  MovieService.new.parse_movies(1, 500)
   puts "#{Movie.where(popular: true).count} popular movies created!"
 end
 
 def create_actors_casts
   puts 'Creating actors and casts...'
   Movie.where(popular: true).each do |movie|
+    next if Actor.count >= 10000
+
     MovieService.new.parse_actors_casts(movie)
+    puts "#{Actor.count} actors created!"
+    puts "#{Cast.count} casts created!"
   end
-  puts "#{Actor.count} actors created!"
-  puts "#{Cast.count} casts created!"
 end
 
 def create_users_lists_bookmarks
@@ -62,12 +64,12 @@ def create_users_lists_bookmarks
   puts "#{superhero.movies.count} movies added to superhero list of John!"
 end
 
-clean_database
+# clean_database
 
-puts 'Starting to seed...'
+# puts 'Starting to seed...'
 
-create_genres
-create_movies
+# create_genres
+# create_movies
 create_actors_casts
 create_users_lists_bookmarks
 
