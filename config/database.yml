@@ -81,4 +81,6 @@ test:
 #
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  database: gwen_watch_list_2_production
+  username: gwen_watch_list_2
+  password: <%= ENV["RAILS_MOVIE_LISTS_DATABASE_PASSWORD"] %>
